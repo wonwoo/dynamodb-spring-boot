@@ -5,7 +5,7 @@
   <parent>
     <artifactId>dynamodb-spring-boot</artifactId>
     <groupId>io.wonwoo.dynamodb</groupId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1-RELEASE</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
@@ -24,7 +24,7 @@
     <dependency>
       <groupId>io.wonwoo.dynamodb</groupId>
       <artifactId>dynamodb-spring-boot-starter</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>0.0.1-RELEASE</version>
     </dependency>
 
     <dependency>
