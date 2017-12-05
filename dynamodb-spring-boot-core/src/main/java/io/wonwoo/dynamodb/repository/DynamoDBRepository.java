@@ -1,10 +1,10 @@
 package io.wonwoo.dynamodb.repository;
 
-import org.socialsignin.spring.data.dynamodb.repository.DynamoDBCrudRepository;
-import org.springframework.data.repository.NoRepositoryBean;
-
 import java.io.Serializable;
 import java.util.List;
+
+import org.socialsignin.spring.data.dynamodb.repository.DynamoDBCrudRepository;
+import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
 public interface DynamoDBRepository<T, ID extends Serializable> extends DynamoDBCrudRepository<T, ID> {
@@ -12,6 +12,9 @@ public interface DynamoDBRepository<T, ID extends Serializable> extends DynamoDB
   @Override
   List<T> findAll();
 
-  <S extends T> List<S> save(Iterable<S> entites);
+  @Override
+  List<T> findAll(Iterable<ID> ids);
 
+  @Override
+  <S extends T> List<S> save(Iterable<S> entites);
 }

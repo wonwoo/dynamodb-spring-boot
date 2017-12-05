@@ -1,11 +1,13 @@
 package io.wonwoo.dynamodb;
 
+import java.lang.annotation.Annotation;
+
 import org.socialsignin.spring.data.dynamodb.repository.config.DynamoDBRepositoryConfigExtension;
 import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories;
 import org.springframework.boot.autoconfigure.data.AbstractRepositoryConfigurationSourceSupport;
 import org.springframework.data.repository.config.RepositoryConfigurationExtension;
 
-import java.lang.annotation.Annotation;
+import io.wonwoo.dynamodb.repository.DynamoDBRepositoryFactoryBean;
 
 class DynamoRepositoriesAutoConfigureRegistrar extends AbstractRepositoryConfigurationSourceSupport {
 
@@ -24,8 +26,7 @@ class DynamoRepositoriesAutoConfigureRegistrar extends AbstractRepositoryConfigu
     return new DynamoDBRepositoryConfigExtension();
   }
 
-
-  @EnableDynamoDBRepositories
+  @EnableDynamoDBRepositories(repositoryFactoryBeanClass = DynamoDBRepositoryFactoryBean.class)
   private static class EnableDynamoRepositoriesConfiguration {
 
   }
