@@ -1,4 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   io.wonwoo.dynamodb.DynamoAutoConfiguration,\
   io.wonwoo.dynamodb.DynamoDataAutoConfiguration,\
-  io.wonwoo.dynamodb.DynamoRepositoriesAutoConfiguration,\
+  io.wonwoo.dynamodb.DynamoRepositoriesAutoConfiguration
