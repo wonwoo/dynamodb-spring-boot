@@ -38,6 +38,7 @@
         <module>dynamodb-spring-boot-autoconfigure</module>
         <module>dynamodb-spring-boot-starter</module>
         <module>dynamodb-spring-boot-sample</module>
+        <module>dynamodb-spring-boot-test-autoconfigure</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -90,6 +91,14 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>dynamodblocal</id>
+            <name>AWS DynamoDB Local Release Repository</name>
+            <url>https://s3-us-west-2.amazonaws.com/dynamodb-local/release</url>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>

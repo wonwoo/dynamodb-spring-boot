@@ -17,7 +17,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 @Configuration
 @ConditionalOnClass(DynamoDBTemplate.class)
-@AutoConfigureAfter(DynamoAutoConfiguration.class)
+@AutoConfigureAfter({DynamoAutoConfiguration.class, EmbeddedDynamoAutoConfiguration.class})
 public class DynamoDataAutoConfiguration {
 
   private final ApplicationContext applicationContext;
