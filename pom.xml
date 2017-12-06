@@ -5,8 +5,7 @@
 
     <groupId>com.github.wonwoo</groupId>
     <artifactId>dynamodb-spring-boot</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
-
+    <version>0.1.0-SNAPSHOT</version>
 
     <developers>
         <developer>
@@ -14,6 +13,18 @@
             <email>aoruqjfu@gmail.com</email>
         </developer>
     </developers>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>https://opensource.org/licenses/Apache-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/wonwoo/dynamodb-spring-boot</url>
+    </scm>
 
     <distributionManagement>
         <repository>
@@ -31,7 +42,8 @@
     <packaging>pom</packaging>
 
     <name>dynamodb-spring-boot</name>
-    <description>Demo project for Spring Boot</description>
+    <description>dynamodb Spring boot AutoConfigure</description>
+    <url>https://github.com/wonwoo/dynamodb-spring-boot</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -123,20 +135,20 @@
                 </executions>
             </plugin>
 
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-gpg-plugin</artifactId>-->
-                <!--<version>1.6</version>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>sign-artifacts</id>-->
-                        <!--<phase>verify</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>sign</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
