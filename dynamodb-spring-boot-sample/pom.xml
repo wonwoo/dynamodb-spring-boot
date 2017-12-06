@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
     <artifactId>dynamodb-spring-boot</artifactId>
-    <groupId>io.wonwoo.dynamodb</groupId>
+    <groupId>com.github.wonwoo</groupId>
     <version>0.0.2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
@@ -22,7 +22,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>io.wonwoo.dynamodb</groupId>
+      <groupId>com.github.wonwoo</groupId>
       <artifactId>dynamodb-spring-boot-starter</artifactId>
     </dependency>
 
