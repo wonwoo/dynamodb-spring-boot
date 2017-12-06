@@ -24,7 +24,6 @@
     <dependency>
       <groupId>io.wonwoo.dynamodb</groupId>
       <artifactId>dynamodb-spring-boot-starter</artifactId>
-      <version>0.0.2-SNAPSHOT</version>
     </dependency>
 
     <dependency>
