@@ -51,6 +51,11 @@
         <dependencies>
             <dependency>
                 <groupId>io.wonwoo.dynamodb</groupId>
+                <artifactId>dynamodb-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.wonwoo.dynamodb</groupId>
                 <artifactId>dynamodb-spring-boot-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
