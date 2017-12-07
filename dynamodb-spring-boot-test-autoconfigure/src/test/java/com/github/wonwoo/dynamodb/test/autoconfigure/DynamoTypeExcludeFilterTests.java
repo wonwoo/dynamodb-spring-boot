@@ -16,9 +16,37 @@
 
 package com.github.wonwoo.dynamodb.test.autoconfigure;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * @author wonwoo
  */
+@RunWith(SpringRunner.class)
+@DynamoTest(includeFilters = @ComponentScan.Filter(Component.class),
+        excludeFilters = @ComponentScan.Filter(Service.class))
 public class DynamoTypeExcludeFilterTests {
 
+    @Autowired
+    private ExampleComponent component;
+
+    @Autowired(required = false)
+    private ExampleService service;
+
+    @Test
+    public void testIncludeFilter() {
+        assertThat(component.getMessage()).isEqualTo("Hello!");
+    }
+
+    @Test
+    public void testExcludeFilter() {
+        assertThat(service).isNull();
+    }
 }

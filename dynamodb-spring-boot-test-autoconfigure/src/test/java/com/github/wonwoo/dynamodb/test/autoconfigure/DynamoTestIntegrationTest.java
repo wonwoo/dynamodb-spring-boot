@@ -16,7 +16,7 @@
 
 package com.github.wonwoo.dynamodb.test.autoconfigure;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Test;
@@ -45,7 +45,7 @@ public class DynamoTestIntegrationTest {
 
     @Test
     public void saveTest() {
-        personRepository.save(Arrays.asList(new Person("wonwoo"), new Person("keven")));
+        personRepository.save(Collections.singletonList(new Person("wonwoo")));
         List<Person> person = personRepository.findAll();
         assertThat(person.iterator().next().getName()).isEqualTo("wonwoo");
     }
