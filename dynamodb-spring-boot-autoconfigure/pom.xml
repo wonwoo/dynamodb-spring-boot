@@ -52,7 +52,6 @@
     <dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>DynamoDBLocal</artifactId>
-      <version>1.11.86</version>
       <optional>true</optional>
     </dependency>
 
@@ -60,7 +59,6 @@
     <dependency>
       <groupId>com.almworks.sqlite4java</groupId>
       <artifactId>sqlite4java</artifactId>
-      <version>1.0.392</version>
       <optional>true</optional>
     </dependency>
 
