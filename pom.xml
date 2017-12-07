@@ -39,7 +39,7 @@
         <module>dynamodb-spring-boot-starter</module>
         <module>dynamodb-spring-boot-sample</module>
         <module>dynamodb-spring-boot-test-autoconfigure</module>
-        <module>dynamodb-spring-boot-test-starter</module>
+        <module>dynamodb-spring-boot-starter-test</module>
     </modules>
     <packaging>pom</packaging>
 
