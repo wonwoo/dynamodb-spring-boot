@@ -57,6 +57,7 @@
         <sqlite4java.version>1.0.392</sqlite4java.version>
         <maven-surefire-plugin.version>2.20</maven-surefire-plugin.version>
         <maven.jacoco.version>0.7.6.201602180812</maven.jacoco.version>
+        <coveralls.version>4.3.0</coveralls.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.testSource>1.8</maven.compiler.testSource>
@@ -210,6 +211,14 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>${coveralls.version}</version>
+                <configuration>
+                    <repoToken>qwbEzR9eSd6aWEdGsL99XuU8NblkJdPDL</repoToken>
+                </configuration>
             </plugin>
         </plugins>
     </build>
