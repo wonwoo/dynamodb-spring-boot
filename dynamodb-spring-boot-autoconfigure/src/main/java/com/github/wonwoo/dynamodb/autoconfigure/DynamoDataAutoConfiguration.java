@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.wonwoo.dynamodb;
+package com.github.wonwoo.dynamodb.autoconfigure;
 
 import org.socialsignin.spring.data.dynamodb.core.DynamoDBTemplate;
 import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBMappingContext;

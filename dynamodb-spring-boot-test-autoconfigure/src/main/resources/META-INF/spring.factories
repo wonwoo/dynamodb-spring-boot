@@ -1,5 +1,5 @@
 com.github.wonwoo.dynamodb.test.autoconfigure.AutoConfigureDynamo=\
-  com.github.wonwoo.dynamodb.DynamoDataAutoConfiguration,\
-  com.github.wonwoo.dynamodb.DynamoRepositoriesAutoConfiguration,\
-  com.github.wonwoo.dynamodb.DynamoAutoConfiguration,\
-  com.github.wonwoo.dynamodb.EmbeddedDynamoAutoConfiguration
+  com.github.wonwoo.dynamodb.autoconfigure.DynamoDataAutoConfiguration,\
+  com.github.wonwoo.dynamodb.autoconfigure.DynamoRepositoriesAutoConfiguration,\
+  com.github.wonwoo.dynamodb.autoconfigure.DynamoAutoConfiguration,\
+  com.github.wonwoo.dynamodb.autoconfigure.EmbeddedDynamoAutoConfiguration

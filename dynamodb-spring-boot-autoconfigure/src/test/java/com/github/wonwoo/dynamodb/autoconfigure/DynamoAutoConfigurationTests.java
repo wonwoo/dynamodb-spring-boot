@@ -24,7 +24,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.github.wonwoo.dynamodb.DynamoAutoConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

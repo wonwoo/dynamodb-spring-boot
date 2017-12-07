@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.wonwoo.dynamodb;
+package com.github.wonwoo.dynamodb.autoconfigure;
 
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;

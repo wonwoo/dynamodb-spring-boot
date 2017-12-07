@@ -24,9 +24,6 @@ import org.springframework.boot.test.util.EnvironmentTestUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;
 
-import com.github.wonwoo.dynamodb.DynamoAutoConfiguration;
-import com.github.wonwoo.dynamodb.DynamoDataAutoConfiguration;
-import com.github.wonwoo.dynamodb.DynamoRepositoriesAutoConfiguration;
 import com.github.wonwoo.dynamodb.TestAutoConfigurationPackage;
 import com.github.wonwoo.dynamodb.autoconfigure.person.Person;
 import com.github.wonwoo.dynamodb.autoconfigure.person.PersonRepository;

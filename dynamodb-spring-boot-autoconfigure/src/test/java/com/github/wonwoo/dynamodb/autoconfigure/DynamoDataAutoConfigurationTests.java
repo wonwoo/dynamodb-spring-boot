@@ -29,8 +29,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.github.wonwoo.dynamodb.DynamoAutoConfiguration;
-import com.github.wonwoo.dynamodb.DynamoDataAutoConfiguration;
 import com.github.wonwoo.dynamodb.autoconfigure.person.Person;
 
 import static org.assertj.core.api.Assertions.assertThat;

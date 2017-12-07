@@ -23,9 +23,6 @@ import org.springframework.boot.test.util.EnvironmentTestUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.github.wonwoo.dynamodb.DynamoDataAutoConfiguration;
-import com.github.wonwoo.dynamodb.DynamoDbCreateTableBeanPostProcessor;
-import com.github.wonwoo.dynamodb.EmbeddedDynamoAutoConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

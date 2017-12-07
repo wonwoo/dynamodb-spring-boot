@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.wonwoo.dynamodb;
+package com.github.wonwoo.dynamodb.autoconfigure;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
