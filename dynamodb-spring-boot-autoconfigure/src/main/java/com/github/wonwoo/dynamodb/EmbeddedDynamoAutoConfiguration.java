@@ -12,13 +12,14 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.almworks.sqlite4java.SQLite;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.local.embedded.DynamoDBEmbedded;
 import com.amazonaws.services.dynamodbv2.model.*;
 
 @Configuration
-@ConditionalOnClass(DynamoDBEmbedded.class)
+@ConditionalOnClass({DynamoDBEmbedded.class, SQLite.class})
 @AutoConfigureBefore(DynamoAutoConfiguration.class)
 public class EmbeddedDynamoAutoConfiguration {
 
