@@ -39,6 +39,7 @@
         <module>dynamodb-spring-boot-starter</module>
         <module>dynamodb-spring-boot-sample</module>
         <module>dynamodb-spring-boot-test-autoconfigure</module>
+        <module>dynamodb-spring-boot-test-starter</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -78,6 +79,11 @@
             <dependency>
                 <groupId>com.github.wonwoo</groupId>
                 <artifactId>dynamodb-spring-boot-autoconfigure</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.wonwoo</groupId>
+                <artifactId>dynamodb-spring-boot-test-autoconfigure</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
