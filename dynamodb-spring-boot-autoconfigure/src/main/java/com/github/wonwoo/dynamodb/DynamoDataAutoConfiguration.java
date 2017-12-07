@@ -37,6 +37,12 @@ public class DynamoDataAutoConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
+  public DynamoDbMapping dynamoDbMapping(AmazonDynamoDB amazonDynamoDB, DynamoDBMappingContext context) {
+    return new DynamoDbMapping(amazonDynamoDB, context);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
   public DynamoDBTemplate dynamoDBTemplate(AmazonDynamoDB amazonDynamoDB,
                                            ObjectProvider<DynamoDBMapperConfig> dynamoDBMapperConfig) {
     return new DynamoDBTemplate(amazonDynamoDB,
