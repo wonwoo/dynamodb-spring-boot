@@ -68,9 +68,17 @@ public class DynamoDbMapping {
         for (DynamoDBPersistentEntity<?> entity : context.getPersistentEntities()) {
             DynamoDBPersistentProperty idProperty = entity.getIdProperty();
             DynamoDBTable table = findMergedAnnotation(entity.getTypeInformation().getType(), DynamoDBTable.class);
-            results.add(createTable(table.tableName(), idProperty.getName()));
+            if(!isTable(table.tableName())) {
+                results.add(createTable(table.tableName(), idProperty.getName()));
+            }
         }
         return results;
+    }
+
+    private boolean isTable(String tableName) {
+        ListTablesResult tables = amazonDynamoDB.listTables();
+        List<String> tableNames = tables.getTableNames();
+        return tableNames.size() != 0 && tableNames.stream().anyMatch(s -> s.equals(tableName));
     }
 
     private CreateTableResult createTable(String tableName, String hashKeyName) {

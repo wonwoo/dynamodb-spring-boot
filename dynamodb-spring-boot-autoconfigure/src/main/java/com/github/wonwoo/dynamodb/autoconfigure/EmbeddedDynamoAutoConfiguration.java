@@ -16,7 +16,7 @@
 
 package com.github.wonwoo.dynamodb.autoconfigure;
 
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +31,7 @@ import com.amazonaws.services.dynamodbv2.local.embedded.DynamoDBEmbedded;
  */
 @Configuration
 @ConditionalOnClass({DynamoDBEmbedded.class, SQLite.class})
-@AutoConfigureBefore(DynamoAutoConfiguration.class)
+@AutoConfigureAfter(DynamoAutoConfiguration.class)
 public class EmbeddedDynamoAutoConfiguration {
 
     @Bean(destroyMethod = "shutdown")

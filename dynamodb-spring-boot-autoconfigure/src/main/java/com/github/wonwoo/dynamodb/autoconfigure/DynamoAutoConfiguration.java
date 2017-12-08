@@ -16,6 +16,7 @@
 
 package com.github.wonwoo.dynamodb.autoconfigure;
 
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionOutcome;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -43,6 +44,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 @ConditionalOnClass(AmazonDynamoDB.class)
 @Conditional(DynamoAutoConfiguration.AwsDynamoCondition.class)
 @EnableConfigurationProperties(DynamoProperties.class)
+@AutoConfigureBefore(EmbeddedDynamoAutoConfiguration.class)
 public class DynamoAutoConfiguration {
 
   private final DynamoProperties properties;

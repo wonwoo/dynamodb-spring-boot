@@ -54,6 +54,7 @@
         <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
         <spring-data-dynamodb.version>4.5.0</spring-data-dynamodb.version>
         <dynamodb-local.version>1.11.86</dynamodb-local.version>
+        <aws-java-sdk-dynamodb.version>1.11.93</aws-java-sdk-dynamodb.version>
         <sqlite4java.version>1.0.392</sqlite4java.version>
         <maven-surefire-plugin.version>2.20</maven-surefire-plugin.version>
         <maven.jacoco.version>0.7.6.201602180812</maven.jacoco.version>
@@ -70,6 +71,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.github.wonwoo</groupId>
+                <artifactId>dynamodb-spring-boot-starter-test</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.github.wonwoo</groupId>
                 <artifactId>dynamodb-spring-boot-starter</artifactId>
@@ -100,6 +106,11 @@
                 <artifactId>DynamoDBLocal</artifactId>
                 <version>${dynamodb-local.version}</version>
                 <optional>true</optional>
+            </dependency>
+            <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-dynamodb</artifactId>
+                <version>${aws-java-sdk-dynamodb.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.almworks.sqlite4java</groupId>
