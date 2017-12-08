@@ -58,6 +58,8 @@
         <maven-surefire-plugin.version>2.20</maven-surefire-plugin.version>
         <maven.jacoco.version>0.7.6.201602180812</maven.jacoco.version>
         <coveralls.version>4.3.0</coveralls.version>
+        <jacoco.it.execution.data.file>${project.build.directory}/coverage-reports/jacoco-it.exec</jacoco.it.execution.data.file>
+        <jacoco.ut.execution.data.file>${project.build.directory}/coverage-reports/jacoco-ut.exec</jacoco.ut.execution.data.file>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.testSource>1.8</maven.compiler.testSource>
@@ -123,6 +125,30 @@
         </repository>
     </repositories>
 
+    <profiles>
+        <profile>
+            <id>deploy</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
@@ -167,30 +193,23 @@
                 </executions>
             </plugin>
 
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-gpg-plugin</artifactId>-->
-                <!--<version>1.6</version>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>sign-artifacts</id>-->
-                        <!--<phase>verify</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>sign</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${maven.jacoco.version}</version>
+                <configuration>
+                    <outputDirectory>${project.reporting.outputDirectory}/${project.version}/jacoco</outputDirectory>
+                </configuration>
                 <executions>
                     <execution>
                         <id>default-prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
+                        <configuration>
+                            <destFile>${jacoco.ut.execution.data.file}</destFile>
+                            <propertyName>surefireArgLine</propertyName>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>default-prepare-agent-integration</id>
@@ -203,12 +222,20 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <configuration>
+                            <dataFile>${jacoco.ut.execution.data.file}</dataFile>
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>default-report-integration</id>
                         <goals>
                             <goal>report-integration</goal>
                         </goals>
+                        <configuration>
+                            <dataFile>${jacoco.it.execution.data.file}</dataFile>
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -218,8 +245,17 @@
                 <version>${coveralls.version}</version>
                 <configuration>
                     <repoToken>qwbEzR9eSd6aWEdGsL99XuU8NblkJdPDL</repoToken>
+                    <jacocoReports>
+                        <jacocoReport>dynamodb-spring-boot-autoconfigure/target/site/jacoco-it/jacoco.xml</jacocoReport>
+                        <jacocoReport>dynamodb-spring-boot-autoconfigure/target/site/jacoco-ut/jacoco.xml</jacocoReport>
+                        <jacocoReport>dynamodb-spring-boot-core/target/site/jacoco-it/jacoco.xml</jacocoReport>
+                        <jacocoReport>dynamodb-spring-boot-core/target/site/jacoco-ut/jacoco.xml</jacocoReport>
+                        <jacocoReport>dynamodb-spring-boot-test-autoconfigure/target/site/jacoco-it/jacoco.xml</jacocoReport>
+                        <jacocoReport>dynamodb-spring-boot-test-autoconfigure/target/site/jacoco-ut/jacoco.xml</jacocoReport>
+                    </jacocoReports>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 
