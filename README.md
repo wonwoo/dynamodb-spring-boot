@@ -51,6 +51,16 @@ CommandLineRunner commandLineRunner(PersonRepository personRepository) {
 }
 ```
 
+#### Maven Install 
+
+```xml
+<dependency>
+    <groupId>com.github.wonwoo</groupId>
+    <artifactId>dynamodb-spring-boot-starter</artifactId>
+    <version>0.1.0-RELEASE</version>
+</dependency>
+```
+
 ### dynamodb-spring-boot-test Example
 
 TODO
