@@ -38,66 +38,77 @@ import com.amazonaws.services.dynamodbv2.model.*;
  */
 public class DynamoDbMapping {
 
-    private final AmazonDynamoDB amazonDynamoDB;
-    private final DynamoDBMappingContext context;
+  private final AmazonDynamoDB amazonDynamoDB;
+  private final DynamoDBMappingContext context;
+  private Long readCapacityUnits = 10L;
+  private Long writeCapacityUnits = 10L;
 
-    public DynamoDbMapping(AmazonDynamoDB amazonDynamoDB, DynamoDBMappingContext context) {
-        this.amazonDynamoDB = amazonDynamoDB;
-        this.context = context;
+  public DynamoDbMapping(AmazonDynamoDB amazonDynamoDB, DynamoDBMappingContext context) {
+    this.amazonDynamoDB = amazonDynamoDB;
+    this.context = context;
+  }
+
+  public Collection<DynamoDBPersistentEntityImpl<?>> getPersistentEntities() {
+    return context.getPersistentEntities();
+  }
+
+  public DynamoDBPersistentEntityImpl<?> getPersistentEntity(Class<?> type) {
+    return context.getPersistentEntity(type);
+  }
+
+  public DynamoDBPersistentProperty getIdProperty(Class<?> type) {
+    return context.getPersistentEntity(type).getIdProperty();
+  }
+
+  public TypeInformation<?> getTypeInformation(Class<?> type) {
+    return context.getPersistentEntity(type).getTypeInformation();
+  }
+
+
+  public List<CreateTableResult> createTable() {
+    List<CreateTableResult> results = new ArrayList<>();
+    for (DynamoDBPersistentEntity<?> entity : context.getPersistentEntities()) {
+      DynamoDBPersistentProperty idProperty = entity.getIdProperty();
+      DynamoDBTable table = findMergedAnnotation(entity.getTypeInformation().getType(), DynamoDBTable.class);
+      if (!isTable(table.tableName())) {
+        results.add(createTable(table.tableName(), idProperty.getName()));
+      }
     }
+    return results;
+  }
 
-    public Collection<DynamoDBPersistentEntityImpl<?>> getPersistentEntities() {
-        return context.getPersistentEntities();
-    }
+  private boolean isTable(String tableName) {
+    ListTablesResult tables = amazonDynamoDB.listTables();
+    List<String> tableNames = tables.getTableNames();
+    return tableNames.size() != 0 && tableNames.stream().anyMatch(s -> s.equals(tableName));
+  }
 
-    public DynamoDBPersistentEntityImpl<?> getPersistentEntity(Class<?> type) {
-        return context.getPersistentEntity(type);
-    }
+  private CreateTableResult createTable(String tableName, String hashKeyName) {
+    List<AttributeDefinition> attributeDefinitions = new ArrayList<>();
+    attributeDefinitions.add(new AttributeDefinition(hashKeyName, ScalarAttributeType.S));
+    List<KeySchemaElement> ks = new ArrayList<>();
+    ks.add(new KeySchemaElement(hashKeyName, KeyType.HASH));
+    ProvisionedThroughput provisionedthroughput =
+        new ProvisionedThroughput(this.readCapacityUnits, this.writeCapacityUnits);
+    CreateTableRequest request =
+        new CreateTableRequest()
+            .withTableName(tableName)
+            .withAttributeDefinitions(attributeDefinitions)
+            .withKeySchema(ks)
+            .withProvisionedThroughput(provisionedthroughput);
 
-    public DynamoDBPersistentProperty getIdProperty(Class<?> type) {
-        return context.getPersistentEntity(type).getIdProperty();
-    }
+    return amazonDynamoDB.createTable(request);
+  }
 
-    public TypeInformation<?> getTypeInformation(Class<?> type) {
-        return context.getPersistentEntity(type).getTypeInformation();
-    }
+  private <A extends Annotation> A findMergedAnnotation(AnnotatedElement element, Class<A> annotationType) {
+    return AnnotatedElementUtils.findMergedAnnotation(element, annotationType);
+  }
 
+  public void setReadCapacityUnits(Long readCapacityUnits) {
+    this.readCapacityUnits = readCapacityUnits;
+  }
 
-    public List<CreateTableResult> createTable() {
-        List<CreateTableResult> results = new ArrayList<>();
-        for (DynamoDBPersistentEntity<?> entity : context.getPersistentEntities()) {
-            DynamoDBPersistentProperty idProperty = entity.getIdProperty();
-            DynamoDBTable table = findMergedAnnotation(entity.getTypeInformation().getType(), DynamoDBTable.class);
-            if(!isTable(table.tableName())) {
-                results.add(createTable(table.tableName(), idProperty.getName()));
-            }
-        }
-        return results;
-    }
-
-    private boolean isTable(String tableName) {
-        ListTablesResult tables = amazonDynamoDB.listTables();
-        List<String> tableNames = tables.getTableNames();
-        return tableNames.size() != 0 && tableNames.stream().anyMatch(s -> s.equals(tableName));
-    }
-
-    private CreateTableResult createTable(String tableName, String hashKeyName) {
-        List<AttributeDefinition> attributeDefinitions = new ArrayList<>();
-        attributeDefinitions.add(new AttributeDefinition(hashKeyName, ScalarAttributeType.S));
-        List<KeySchemaElement> ks = new ArrayList<>();
-        ks.add(new KeySchemaElement(hashKeyName, KeyType.HASH));
-        ProvisionedThroughput provisionedthroughput = new ProvisionedThroughput(1000L, 1000L);
-        CreateTableRequest request =
-                new CreateTableRequest()
-                        .withTableName(tableName)
-                        .withAttributeDefinitions(attributeDefinitions)
-                        .withKeySchema(ks)
-                        .withProvisionedThroughput(provisionedthroughput);
-
-        return amazonDynamoDB.createTable(request);
-    }
-
-    private  <A extends Annotation> A findMergedAnnotation(AnnotatedElement element, Class<A> annotationType) {
-        return AnnotatedElementUtils.findMergedAnnotation(element, annotationType);
-    }
+  public void setWriteCapacityUnits(Long writeCapacityUnits) {
+    this.writeCapacityUnits = writeCapacityUnits;
+  }
 }

@@ -41,6 +41,16 @@ public class DynamoProperties {
    */
   private Regions regions = Regions.AP_NORTHEAST_2;
 
+  /**
+   * dynamoDb Create Table readCapacityUnits default 10
+   */
+  private Long readCapacityUnits = 10L;
+
+  /**
+   * dynamoDb Create Table writeCapacityUnits default 10
+   */
+  private Long writeCapacityUnits = 10L;
+
   public String getAccessKey() {
     return accessKey;
   }
@@ -65,6 +75,23 @@ public class DynamoProperties {
     this.regions = regions;
   }
 
+
+  public void setReadCapacityUnits(Long readCapacityUnits) {
+    this.readCapacityUnits = readCapacityUnits;
+  }
+
+  public void setWriteCapacityUnits(Long writeCapacityUnits) {
+    this.writeCapacityUnits = writeCapacityUnits;
+  }
+
+  public Long getReadCapacityUnits() {
+    return readCapacityUnits;
+  }
+
+  public Long getWriteCapacityUnits() {
+    return writeCapacityUnits;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -74,7 +101,10 @@ public class DynamoProperties {
 
     if (accessKey != null ? !accessKey.equals(that.accessKey) : that.accessKey != null) return false;
     if (secretKey != null ? !secretKey.equals(that.secretKey) : that.secretKey != null) return false;
-    return regions == that.regions;
+    if (regions != that.regions) return false;
+    if (readCapacityUnits != null ? !readCapacityUnits.equals(that.readCapacityUnits) : that.readCapacityUnits != null)
+      return false;
+    return writeCapacityUnits != null ? writeCapacityUnits.equals(that.writeCapacityUnits) : that.writeCapacityUnits == null;
   }
 
   @Override
@@ -82,6 +112,8 @@ public class DynamoProperties {
     int result = accessKey != null ? accessKey.hashCode() : 0;
     result = 31 * result + (secretKey != null ? secretKey.hashCode() : 0);
     result = 31 * result + (regions != null ? regions.hashCode() : 0);
+    result = 31 * result + (readCapacityUnits != null ? readCapacityUnits.hashCode() : 0);
+    result = 31 * result + (writeCapacityUnits != null ? writeCapacityUnits.hashCode() : 0);
     return result;
   }
 
@@ -91,6 +123,8 @@ public class DynamoProperties {
         "accessKey='" + accessKey + '\'' +
         ", secretKey='" + secretKey + '\'' +
         ", regions=" + regions +
+        ", readCapacityUnits=" + readCapacityUnits +
+        ", writeCapacityUnits=" + writeCapacityUnits +
         '}';
   }
 }

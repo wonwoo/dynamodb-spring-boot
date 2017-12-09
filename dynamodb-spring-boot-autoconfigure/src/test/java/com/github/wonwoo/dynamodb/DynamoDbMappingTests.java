@@ -16,10 +16,12 @@
 
 package com.github.wonwoo.dynamodb;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
+import com.amazonaws.services.dynamodbv2.model.ListTablesResult;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -63,6 +65,8 @@ public class DynamoDbMappingTests {
         context.setInitialEntitySet(initialEntitySet);
         context.afterPropertiesSet();
         this.dynamoDbMapping = new DynamoDbMapping(amazonDynamoDB, context);
+        this.dynamoDbMapping.setReadCapacityUnits(100L);
+        this.dynamoDbMapping.setWriteCapacityUnits(100L);
     }
 
     @Test
@@ -96,6 +100,9 @@ public class DynamoDbMappingTests {
         TableDescription tableDescription = new TableDescription();
         tableDescription.setItemCount(10L);
         value.setTableDescription(tableDescription);
+        ListTablesResult listTablesResult = new ListTablesResult();
+        listTablesResult.setTableNames(Arrays.asList("foo", "bar"));
+        given(amazonDynamoDB.listTables()).willReturn(listTablesResult);
         given(amazonDynamoDB.createTable(any())).willReturn(value);
         List<CreateTableResult> table = this.dynamoDbMapping.createTable();
         assertThat(table).hasSize(1);

@@ -51,7 +51,8 @@ public class DynamoAutoConfigurationTests {
   @Test
   public void dynamoDbAutoConfig() {
     load(DynamoAutoConfiguration.class,
-        "spring.data.dynamodb.access-key=test", "spring.data.dynamodb.secret-key=test");
+        "spring.data.dynamodb.access-key=test", "spring.data.dynamodb.secret-key=test",
+        "spring.data.dynamodb.readCapacityUnits=100", "spring.data.dynamodb.writeCapacityUnits=200");
     assertThat(this.context.getBeansOfType(AWSCredentialsProvider.class)).hasSize(1);
     assertThat(this.context.getBeansOfType(AmazonDynamoDB.class)).hasSize(1);
   }

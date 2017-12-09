@@ -47,13 +47,13 @@
     <dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>DynamoDBLocal</artifactId>
-      <optional>true</optional>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>com.almworks.sqlite4java</groupId>
       <artifactId>sqlite4java</artifactId>
-      <optional>true</optional>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
