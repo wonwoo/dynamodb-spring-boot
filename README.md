@@ -59,10 +59,100 @@ CommandLineRunner commandLineRunner(PersonRepository personRepository) {
 <dependency>
     <groupId>com.github.wonwoo</groupId>
     <artifactId>dynamodb-spring-boot-starter</artifactId>
-    <version>0.1.0-RELEASE</version>
+    <version>0.1.2-RELEASE</version>
 </dependency>
 ```
 
 ### dynamodb-spring-boot-test Example
 
-TODO
+#### @DynamoTest 
+
+```java
+@DynamoTest
+@RunWith(SpringRunner.class)
+public class PersonRepositoryTests {
+
+    @Autowired
+    private PersonRepository personRepository;
+
+    @Test
+    public void save() {
+        List<Person> persons = personRepository.findAll();
+        assertThat(persons).hasSize(2);
+    }
+}
+
+```
+
+#### Maven Install 
+
+```xml
+<dependency>
+  <groupId>com.github.wonwoo</groupId>
+  <artifactId>dynamodb-spring-boot-starter-test</artifactId>
+  <version>0.1.2-RELEASE</version>
+  <scope>test</scope>
+</dependency>
+```
+
+
+#### Embedded Dynamodb setting
+
+1. maven dependency
+```xml
+<dependency>
+  <groupId>com.amazonaws</groupId>
+  <artifactId>DynamoDBLocal</artifactId>
+  <version>{local.version}</version>  
+  <scope>test</scope>
+</dependency>
+
+<dependency>
+  <groupId>com.almworks.sqlite4java</groupId>
+  <artifactId>sqlite4java</artifactId>
+  <version>{local.version}</version>  
+  <scope>test</scope>
+</dependency>
+
+```
+
+2. maven plugins
+
+```xml
+<plugins>
+  <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-dependency-plugin</artifactId>
+    <executions>
+      <execution>
+        <id>copy-dependencies</id>
+        <phase>process-test-resources</phase>
+        <goals>
+          <goal>copy-dependencies</goal>
+        </goals>
+        <configuration>
+          <outputDirectory>${project.build.directory}/dependencies</outputDirectory>
+          <overWriteReleases>false</overWriteReleases>
+          <overWriteSnapshots>false</overWriteSnapshots>
+          <overWriteIfNewer>true</overWriteIfNewer>
+        </configuration>
+      </execution>
+    </executions>
+  </plugin>
+  <plugin>
+    <artifactId>maven-surefire-plugin</artifactId>
+    <version>${maven-surefire-plugin.version}</version>
+    <configuration>
+      <argLine>-Dsqlite4java.library.path=${basedir}/target/dependencies</argLine>
+    </configuration>
+  </plugin>
+</plugins>
+```
+
+### Sample code github
+
+[Sample](https://github.com/wonwoo/dynamodb-spring-boot/tree/master/dynamodb-spring-boot-sample)
+
+[SampleApplication](https://github.com/wonwoo/dynamodb-spring-boot/blob/master/dynamodb-spring-boot-sample/src/main/java/com/github/wonwoo/dynamodb/SampleApplication.java)
+
+[PersonRepositoryTests](https://github.com/wonwoo/dynamodb-spring-boot/blob/master/dynamodb-spring-boot-sample/src/test/java/com/github/wonwoo/dynamodb/PersonRepositoryTests.java)
