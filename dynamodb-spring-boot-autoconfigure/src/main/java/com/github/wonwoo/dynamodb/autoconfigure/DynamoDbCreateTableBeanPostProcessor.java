@@ -32,6 +32,7 @@ public class DynamoDbCreateTableBeanPostProcessor implements BeanPostProcessor {
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if (bean instanceof DynamoDbMapping) {
+            //TODO not embedded support
             ((DynamoDbMapping) bean).createTable();
         }
         return bean;
