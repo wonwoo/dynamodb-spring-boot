@@ -22,6 +22,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.PageRequest;
 
 import com.github.wonwoo.dynamodb.domain.Person;
 import com.github.wonwoo.dynamodb.domain.PersonRepository;
@@ -43,7 +44,7 @@ public class SampleApplication {
                     new Person("kevin"),
                     new Person("josh long"))
             );
-            personRepository.findAll()
+            personRepository.findAll(new PageRequest(0,3))
                     .forEach(System.out::println);
         };
     }

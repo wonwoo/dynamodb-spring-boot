@@ -20,13 +20,15 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.socialsignin.spring.data.dynamodb.repository.DynamoDBCrudRepository;
+import org.socialsignin.spring.data.dynamodb.repository.DynamoDBPagingAndSortingRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
 /**
  * @author wonwoo
  */
 @NoRepositoryBean
-public interface DynamoDBRepository<T, ID extends Serializable> extends DynamoDBCrudRepository<T, ID> {
+public interface DynamoDBRepository<T, ID extends Serializable>
+        extends DynamoDBPagingAndSortingRepository<T, ID>, DynamoDBCrudRepository<T, ID> {
 
   @Override
   List<T> findAll();
@@ -36,4 +38,5 @@ public interface DynamoDBRepository<T, ID extends Serializable> extends DynamoDB
 
   @Override
   <S extends T> List<S> save(Iterable<S> entites);
+
 }
