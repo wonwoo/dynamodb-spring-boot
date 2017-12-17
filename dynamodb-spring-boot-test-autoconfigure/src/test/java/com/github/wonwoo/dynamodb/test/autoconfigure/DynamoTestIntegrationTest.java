@@ -45,7 +45,7 @@ public class DynamoTestIntegrationTest {
 
     @Test
     public void saveTest() {
-        personRepository.save(Collections.singletonList(new Person("wonwoo")));
+        personRepository.saveAll(Collections.singletonList(new Person("wonwoo")));
         List<Person> person = personRepository.findAll();
         assertThat(person.iterator().next().getName()).isEqualTo("wonwoo");
     }

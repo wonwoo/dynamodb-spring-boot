@@ -16,15 +16,14 @@
 
 package com.github.wonwoo.dynamodb.autoconfigure;
 
+import com.almworks.sqlite4java.SQLite;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.local.embedded.DynamoDBEmbedded;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.almworks.sqlite4java.SQLite;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.local.embedded.DynamoDBEmbedded;
 
 /**
  * @author wonwoo
@@ -34,14 +33,14 @@ import com.amazonaws.services.dynamodbv2.local.embedded.DynamoDBEmbedded;
 @AutoConfigureAfter(DynamoAutoConfiguration.class)
 public class EmbeddedDynamoAutoConfiguration {
 
-    @Bean(destroyMethod = "shutdown")
-    @ConditionalOnMissingBean
-    public AmazonDynamoDB amazonDynamoDB() {
-        return DynamoDBEmbedded.create().amazonDynamoDB();
-    }
+  @Bean(destroyMethod = "shutdown")
+  @ConditionalOnMissingBean
+  public AmazonDynamoDB amazonDynamoDB() {
+    return DynamoDBEmbedded.create().amazonDynamoDB();
+  }
 
-    @Bean
-    public DynamoDbCreateTableBeanPostProcessor dynamoDbCreateTableBeanPostProcessor() {
-        return new DynamoDbCreateTableBeanPostProcessor();
-    }
+  @Bean
+  public DynamoDbCreateTableBeanPostProcessor dynamoDbCreateTableBeanPostProcessor() {
+    return new DynamoDbCreateTableBeanPostProcessor();
+  }
 }

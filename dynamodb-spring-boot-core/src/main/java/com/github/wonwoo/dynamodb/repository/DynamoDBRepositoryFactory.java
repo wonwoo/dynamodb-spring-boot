@@ -16,10 +16,10 @@
 
 package com.github.wonwoo.dynamodb.repository;
 
-import java.io.Serializable;
-
 import org.socialsignin.spring.data.dynamodb.core.DynamoDBOperations;
 import org.springframework.data.repository.core.RepositoryMetadata;
+
+import java.io.Serializable;
 
 /**
  * @author wonwoo

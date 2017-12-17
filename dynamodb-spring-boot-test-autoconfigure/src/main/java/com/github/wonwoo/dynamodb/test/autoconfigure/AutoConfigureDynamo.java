@@ -16,9 +16,9 @@
 
 package com.github.wonwoo.dynamodb.test.autoconfigure;
 
-import java.lang.annotation.*;
-
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+
+import java.lang.annotation.*;
 
 /**
  * @author wonwoo

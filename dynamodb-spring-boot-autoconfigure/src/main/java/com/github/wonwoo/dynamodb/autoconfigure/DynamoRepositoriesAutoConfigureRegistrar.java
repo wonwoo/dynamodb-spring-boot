@@ -16,14 +16,13 @@
 
 package com.github.wonwoo.dynamodb.autoconfigure;
 
-import java.lang.annotation.Annotation;
-
+import com.github.wonwoo.dynamodb.repository.DynamoDBRepositoryFactoryBean;
 import org.socialsignin.spring.data.dynamodb.repository.config.DynamoDBRepositoryConfigExtension;
 import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories;
 import org.springframework.boot.autoconfigure.data.AbstractRepositoryConfigurationSourceSupport;
 import org.springframework.data.repository.config.RepositoryConfigurationExtension;
 
-import com.github.wonwoo.dynamodb.repository.DynamoDBRepositoryFactoryBean;
+import java.lang.annotation.Annotation;
 
 /**
  * @author wonwoo

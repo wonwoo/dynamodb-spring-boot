@@ -16,13 +16,11 @@
 
 package com.github.wonwoo.dynamodb.autoconfigure;
 
-import org.junit.After;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import org.junit.Test;
 import org.socialsignin.spring.data.dynamodb.core.DynamoDBTemplate;
-import org.springframework.boot.test.util.EnvironmentTestUtils;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import org.springframework.boot.autoconfigure.AutoConfigurations;
+import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,39 +29,27 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class EmbeddedDynamoAutoConfigurationTests {
 
-    private AnnotationConfigApplicationContext context;
+  private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
+      .withConfiguration(AutoConfigurations.of(EmbeddedDynamoAutoConfiguration.class));
 
-    @After
-    public void close() {
-        if (this.context != null) {
-            this.context.close();
-        }
-    }
+  @Test
+  public void dynamoLocalDbAutoConfig() {
 
-    @Test
-    public void dynamoLocalDbAutoConfig() {
-        load(DynamoDataAutoConfiguration.class);
-        assertThat(this.context.getBeansOfType(AmazonDynamoDB.class)).hasSize(1);
-        assertThat(this.context.getBeansOfType(DynamoDbCreateTableBeanPostProcessor.class)).hasSize(1);
-        assertThat(this.context.getBeansOfType(DynamoDBTemplate.class)).hasSize(1);
-    }
+    contextRunner.withUserConfiguration(DynamoDataAutoConfiguration.class)
+        .run(context -> {
+          assertThat(context).hasSingleBean(AmazonDynamoDB.class);
+          assertThat(context).hasSingleBean(DynamoDbCreateTableBeanPostProcessor.class);
+          assertThat(context).hasSingleBean(DynamoDBTemplate.class);
+        });
+  }
 
-    @Test
-    public void dynamoLocalDbNotFoundDataAutoConfig() {
-        load(null);
-        assertThat(this.context.getBeansOfType(AmazonDynamoDB.class)).hasSize(1);
-        assertThat(this.context.getBeansOfType(DynamoDbCreateTableBeanPostProcessor.class)).hasSize(1);
-        assertThat(this.context.getBeansOfType(DynamoDBTemplate.class)).hasSize(0);
-    }
-
-    private void load(Class<?> config, String... environment) {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        EnvironmentTestUtils.addEnvironment(context, environment);
-        if (config != null) {
-            context.register(config);
-        }
-        context.register(EmbeddedDynamoAutoConfiguration.class);
-        context.refresh();
-        this.context = context;
-    }
+  @Test
+  public void dynamoLocalDbNotFoundDataAutoConfig() {
+    contextRunner
+        .run(context -> {
+          assertThat(context).hasSingleBean(AmazonDynamoDB.class);
+          assertThat(context).hasSingleBean(DynamoDbCreateTableBeanPostProcessor.class);
+          assertThat(context).doesNotHaveBean(DynamoDBTemplate.class);
+        });
+  }
 }

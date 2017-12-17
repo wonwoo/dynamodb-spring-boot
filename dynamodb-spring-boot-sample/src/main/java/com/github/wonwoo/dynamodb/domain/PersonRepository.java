@@ -16,10 +16,9 @@
 
 package com.github.wonwoo.dynamodb.domain;
 
+import com.github.wonwoo.dynamodb.repository.DynamoDBRepository;
 import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
 import org.socialsignin.spring.data.dynamodb.repository.EnableScanCount;
-
-import com.github.wonwoo.dynamodb.repository.DynamoDBRepository;
 
 /**
  * @author wonwoo

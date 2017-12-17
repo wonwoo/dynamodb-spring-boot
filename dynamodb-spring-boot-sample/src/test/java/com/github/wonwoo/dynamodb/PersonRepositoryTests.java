@@ -15,16 +15,15 @@
  */
 package com.github.wonwoo.dynamodb;
 
-import java.util.List;
-
+import com.github.wonwoo.dynamodb.domain.Person;
+import com.github.wonwoo.dynamodb.domain.PersonRepository;
+import com.github.wonwoo.dynamodb.test.autoconfigure.DynamoTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.github.wonwoo.dynamodb.domain.Person;
-import com.github.wonwoo.dynamodb.domain.PersonRepository;
-import com.github.wonwoo.dynamodb.test.autoconfigure.DynamoTest;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,12 +34,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 public class PersonRepositoryTests {
 
-    @Autowired
-    private PersonRepository personRepository;
+  @Autowired
+  private PersonRepository personRepository;
 
-    @Test
-    public void save() {
-        List<Person> persons = personRepository.findAll();
-        assertThat(persons).hasSize(2);
-    }
+  @Test
+  public void save() {
+    List<Person> persons = personRepository.findAll();
+    assertThat(persons).hasSize(2);
+  }
 }
