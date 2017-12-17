@@ -16,8 +16,7 @@
 
 package com.github.wonwoo.dynamodb.autoconfigure;
 
-import java.util.Set;
-
+import com.github.wonwoo.dynamodb.autoconfigure.person.Person;
 import org.junit.After;
 import org.junit.Test;
 import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBMappingContext;
@@ -29,7 +28,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.github.wonwoo.dynamodb.autoconfigure.person.Person;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

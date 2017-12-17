@@ -16,6 +16,8 @@
 
 package com.github.wonwoo.dynamodb.autoconfigure;
 
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.github.wonwoo.dynamodb.repository.DynamoDBRepositoryFactoryBean;
 import org.socialsignin.spring.data.dynamodb.repository.DynamoDBCrudRepository;
 import org.socialsignin.spring.data.dynamodb.repository.config.DynamoDBRepositoryConfigExtension;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -25,14 +27,11 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.github.wonwoo.dynamodb.repository.DynamoDBRepositoryFactoryBean;
-
 /**
  * @author wonwoo
  */
 @Configuration
-@ConditionalOnClass({ AmazonDynamoDB.class, DynamoDBCrudRepository.class })
+@ConditionalOnClass({AmazonDynamoDB.class, DynamoDBCrudRepository.class})
 @ConditionalOnMissingBean({DynamoDBRepositoryFactoryBean.class,
     DynamoDBRepositoryConfigExtension.class})
 @ConditionalOnProperty(prefix = "spring.data.dynamodb.repositories", name = "enabled", havingValue = "true", matchIfMissing = true)

@@ -16,6 +16,10 @@
 
 package com.github.wonwoo.dynamodb.autoconfigure;
 
+import com.github.wonwoo.dynamodb.TestAutoConfigurationPackage;
+import com.github.wonwoo.dynamodb.autoconfigure.person.Person;
+import com.github.wonwoo.dynamodb.autoconfigure.person.PersonRepository;
+import com.github.wonwoo.dynamodb.empty.EmptyDataPackage;
 import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.Test;
@@ -23,11 +27,6 @@ import org.springframework.boot.autoconfigure.context.PropertyPlaceholderAutoCon
 import org.springframework.boot.test.util.EnvironmentTestUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;
-
-import com.github.wonwoo.dynamodb.TestAutoConfigurationPackage;
-import com.github.wonwoo.dynamodb.autoconfigure.person.Person;
-import com.github.wonwoo.dynamodb.autoconfigure.person.PersonRepository;
-import com.github.wonwoo.dynamodb.empty.EmptyDataPackage;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

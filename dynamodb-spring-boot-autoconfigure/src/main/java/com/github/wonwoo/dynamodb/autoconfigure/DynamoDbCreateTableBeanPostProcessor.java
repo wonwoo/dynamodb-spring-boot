@@ -24,17 +24,17 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
  */
 public class DynamoDbCreateTableBeanPostProcessor implements BeanPostProcessor {
 
-    @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        return bean;
-    }
+  @Override
+  public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+    return bean;
+  }
 
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        if (bean instanceof DynamoDbMapping) {
-            //TODO not embedded support
-            ((DynamoDbMapping) bean).createTable();
-        }
-        return bean;
+  @Override
+  public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+    if (bean instanceof DynamoDbMapping) {
+      //TODO not embedded support
+      ((DynamoDbMapping) bean).createTable();
     }
+    return bean;
+  }
 }

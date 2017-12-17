@@ -16,8 +16,6 @@
 
 package com.github.wonwoo.dynamodb.test.autoconfigure;
 
-import java.lang.annotation.*;
-
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.OverrideAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.core.AutoConfigureCache;
@@ -26,6 +24,8 @@ import org.springframework.boot.test.context.SpringBootTestContextBootstrapper;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.test.context.BootstrapWith;
+
+import java.lang.annotation.*;
 
 /**
  * @author wonwoo
@@ -42,16 +42,13 @@ import org.springframework.test.context.BootstrapWith;
 @ImportAutoConfiguration
 public @interface DynamoTest {
 
-    boolean useDefaultFilters() default true;
+  boolean useDefaultFilters() default true;
 
+  ComponentScan.Filter[] includeFilters() default {};
 
-    ComponentScan.Filter[] includeFilters() default {};
+  ComponentScan.Filter[] excludeFilters() default {};
 
-
-    ComponentScan.Filter[] excludeFilters() default {};
-
-
-    @AliasFor(annotation = ImportAutoConfiguration.class, attribute = "exclude")
-    Class<?>[] excludeAutoConfiguration() default {};
+  @AliasFor(annotation = ImportAutoConfiguration.class, attribute = "exclude")
+  Class<?>[] excludeAutoConfiguration() default {};
 
 }

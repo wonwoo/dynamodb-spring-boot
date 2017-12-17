@@ -17,13 +17,12 @@
 package com.github.wonwoo.dynamodb.autoconfigure;
 
 
+import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import org.junit.After;
 import org.junit.Test;
 import org.springframework.boot.test.util.EnvironmentTestUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

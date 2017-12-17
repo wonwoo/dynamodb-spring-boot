@@ -16,6 +16,9 @@
 
 package com.github.wonwoo.dynamodb.autoconfigure;
 
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import org.socialsignin.spring.data.dynamodb.core.DynamoDBTemplate;
 import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBMappingContext;
 import org.springframework.beans.factory.ObjectProvider;
@@ -27,10 +30,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 /**
  * @author wonwoo

@@ -16,19 +16,19 @@
 
 package com.github.wonwoo.dynamodb.repository;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.socialsignin.spring.data.dynamodb.repository.DynamoDBCrudRepository;
 import org.socialsignin.spring.data.dynamodb.repository.DynamoDBPagingAndSortingRepository;
 import org.springframework.data.repository.NoRepositoryBean;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author wonwoo
  */
 @NoRepositoryBean
 public interface DynamoDBRepository<T, ID extends Serializable>
-        extends DynamoDBPagingAndSortingRepository<T, ID>, DynamoDBCrudRepository<T, ID> {
+    extends DynamoDBPagingAndSortingRepository<T, ID>, DynamoDBCrudRepository<T, ID> {
 
   @Override
   List<T> findAll();

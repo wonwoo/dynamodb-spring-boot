@@ -16,9 +16,9 @@
 
 package com.github.wonwoo.dynamodb;
 
-import java.lang.annotation.*;
-
 import org.springframework.context.annotation.Import;
+
+import java.lang.annotation.*;
 
 /**
  * @author wonwoo
