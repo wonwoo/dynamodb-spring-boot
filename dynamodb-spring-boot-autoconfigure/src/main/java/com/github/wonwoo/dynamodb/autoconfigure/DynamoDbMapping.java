@@ -69,6 +69,9 @@ public class DynamoDbMapping {
     List<CreateTableResult> results = new ArrayList<>();
     for (DynamoDBPersistentEntity<?> entity : context.getPersistentEntities()) {
       DynamoDBPersistentProperty idProperty = entity.getIdProperty();
+      if(idProperty == null) {
+        throw new NullPointerException("entity property Id is null");
+      }
       DynamoDBTable table = findMergedAnnotation(entity.getTypeInformation().getType(), DynamoDBTable.class);
       if (!isTable(table.tableName())) {
         results.add(createTable(table.tableName(), idProperty.getName()));
