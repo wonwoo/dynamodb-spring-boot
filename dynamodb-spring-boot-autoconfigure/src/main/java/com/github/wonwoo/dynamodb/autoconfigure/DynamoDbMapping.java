@@ -53,15 +53,19 @@ public class DynamoDbMapping {
   }
 
   public DynamoDBPersistentEntityImpl<?> getPersistentEntity(Class<?> type) {
-    return context.getPersistentEntity(type);
+    DynamoDBPersistentEntityImpl<?> persistentEntity = context.getPersistentEntity(type);
+    if(persistentEntity == null) {
+      throw new NullPointerException("persistentEntity is null");
+    }
+    return persistentEntity;
   }
 
   public DynamoDBPersistentProperty getIdProperty(Class<?> type) {
-    return context.getPersistentEntity(type).getIdProperty();
+    return getPersistentEntity(type).getIdProperty();
   }
 
   public TypeInformation<?> getTypeInformation(Class<?> type) {
-    return context.getPersistentEntity(type).getTypeInformation();
+    return getPersistentEntity(type).getTypeInformation();
   }
 
 
