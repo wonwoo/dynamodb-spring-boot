@@ -21,6 +21,7 @@ import java.lang.reflect.AnnotatedElement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBMappingContext;
 import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBPersistentEntity;
@@ -38,13 +39,18 @@ import com.amazonaws.services.dynamodbv2.model.*;
  */
 public class DynamoDbMapping {
 
-  private final AmazonDynamoDB amazonDynamoDB;
+  private final CreateTable createTable;
   private final DynamoDBMappingContext context;
-  private Long readCapacityUnits = 10L;
-  private Long writeCapacityUnits = 10L;
 
-  public DynamoDbMapping(AmazonDynamoDB amazonDynamoDB, DynamoDBMappingContext context) {
-    this.amazonDynamoDB = amazonDynamoDB;
+  private static final String ACTIVE = "ACTIVE";
+  private static final long DEFAULT_SECONDS_BETWEEN_POLLS = 5L;
+  private static final long DEFAULT_TIMEOUT_SECONDS = 30L;
+
+  private long secondsBetweenPolls = DEFAULT_SECONDS_BETWEEN_POLLS;
+  private long timeoutSeconds = DEFAULT_TIMEOUT_SECONDS;
+
+  public DynamoDbMapping(CreateTable createTable, DynamoDBMappingContext context) {
+    this.createTable = createTable;
     this.context = context;
   }
 
@@ -77,45 +83,26 @@ public class DynamoDbMapping {
         throw new NullPointerException("entity property Id is null");
       }
       DynamoDBTable table = findMergedAnnotation(entity.getTypeInformation().getType(), DynamoDBTable.class);
-      if (!isTable(table.tableName())) {
-        results.add(createTable(table.tableName(), idProperty.getName()));
+      if (!createTable.isTable(table.tableName())) {
+        CreateTableResult createTableTable = createTable.createTable(table.tableName(), idProperty.getName());
+        if(!ACTIVE.equals(createTableTable.getTableDescription().getTableStatus()) ) {
+          createTable.waitTableExists(table.tableName(), this.secondsBetweenPolls, this.timeoutSeconds);
+        }
+        results.add(createTableTable);
       }
     }
     return results;
-  }
-
-  private boolean isTable(String tableName) {
-    ListTablesResult tables = amazonDynamoDB.listTables();
-    List<String> tableNames = tables.getTableNames();
-    return tableNames.size() != 0 && tableNames.stream().anyMatch(s -> s.equals(tableName));
-  }
-
-  private CreateTableResult createTable(String tableName, String hashKeyName) {
-    List<AttributeDefinition> attributeDefinitions = new ArrayList<>();
-    attributeDefinitions.add(new AttributeDefinition(hashKeyName, ScalarAttributeType.S));
-    List<KeySchemaElement> ks = new ArrayList<>();
-    ks.add(new KeySchemaElement(hashKeyName, KeyType.HASH));
-    ProvisionedThroughput provisionedthroughput =
-        new ProvisionedThroughput(this.readCapacityUnits, this.writeCapacityUnits);
-    CreateTableRequest request =
-        new CreateTableRequest()
-            .withTableName(tableName)
-            .withAttributeDefinitions(attributeDefinitions)
-            .withKeySchema(ks)
-            .withProvisionedThroughput(provisionedthroughput);
-
-    return amazonDynamoDB.createTable(request);
   }
 
   private <A extends Annotation> A findMergedAnnotation(AnnotatedElement element, Class<A> annotationType) {
     return AnnotatedElementUtils.findMergedAnnotation(element, annotationType);
   }
 
-  public void setReadCapacityUnits(Long readCapacityUnits) {
-    this.readCapacityUnits = readCapacityUnits;
+  public void setSecondsBetweenPolls(long secondsBetweenPolls) {
+    this.secondsBetweenPolls = secondsBetweenPolls;
   }
 
-  public void setWriteCapacityUnits(Long writeCapacityUnits) {
-    this.writeCapacityUnits = writeCapacityUnits;
+  public void setTimeoutSeconds(long timeoutSeconds) {
+    this.timeoutSeconds = timeoutSeconds;
   }
 }

@@ -18,6 +18,7 @@ package com.github.wonwoo.dynamodb.autoconfigure;
 
 import com.github.wonwoo.dynamodb.autoconfigure.person.Person;
 import org.junit.Test;
+import org.socialsignin.spring.data.dynamodb.core.DynamoDBTemplate;
 import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBMappingContext;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.autoconfigure.context.PropertyPlaceholderAutoConfiguration;
@@ -52,6 +53,9 @@ public class DynamoDataAutoConfigurationTests {
           Set<Class<?>> initialEntitySet = (Set<Class<?>>) ReflectionTestUtils
               .getField(mappingContext, "initialEntitySet");
           assertThat(initialEntitySet).containsOnly(Person.class);
+          assertThat(context).hasSingleBean(CreateTable.class);
+          assertThat(context).hasSingleBean(DynamoDBTemplate.class);
+          assertThat(context).hasSingleBean(DynamoDbMapping.class);
         });
   }
 

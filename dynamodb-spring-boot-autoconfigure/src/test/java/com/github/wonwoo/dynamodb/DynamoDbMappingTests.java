@@ -22,6 +22,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.model.CreateTableResult;
 import com.amazonaws.services.dynamodbv2.model.ListTablesResult;
 import com.amazonaws.services.dynamodbv2.model.TableDescription;
+import com.amazonaws.services.dynamodbv2.model.TableStatus;
+import com.github.wonwoo.dynamodb.autoconfigure.CreateTable;
 import com.github.wonwoo.dynamodb.autoconfigure.DynamoDbMapping;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +42,9 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 /**
  * @author wonwoo
@@ -48,10 +52,10 @@ import static org.mockito.BDDMockito.given;
 @RunWith(MockitoJUnitRunner.class)
 public class DynamoDbMappingTests {
 
-  @Mock
-  private AmazonDynamoDB amazonDynamoDB;
-
   private DynamoDBMappingContext context;
+
+  @Mock
+  private CreateTable createTable;
 
 
   private DynamoDbMapping dynamoDbMapping;
@@ -63,9 +67,9 @@ public class DynamoDbMappingTests {
     initialEntitySet.add(Person.class);
     context.setInitialEntitySet(initialEntitySet);
     context.afterPropertiesSet();
-    this.dynamoDbMapping = new DynamoDbMapping(amazonDynamoDB, context);
-    this.dynamoDbMapping.setReadCapacityUnits(100L);
-    this.dynamoDbMapping.setWriteCapacityUnits(100L);
+    this.dynamoDbMapping = new DynamoDbMapping(createTable, context);
+    this.dynamoDbMapping.setSecondsBetweenPolls(10);
+    this.dynamoDbMapping.setTimeoutSeconds(30);
   }
 
   @Test
@@ -98,14 +102,18 @@ public class DynamoDbMappingTests {
     CreateTableResult value = new CreateTableResult();
     TableDescription tableDescription = new TableDescription();
     tableDescription.setItemCount(100L);
+    tableDescription.setTableStatus(TableStatus.CREATING);
     value.setTableDescription(tableDescription);
     ListTablesResult listTablesResult = new ListTablesResult();
     listTablesResult.setTableNames(Arrays.asList("foo", "bar"));
-    given(amazonDynamoDB.listTables()).willReturn(listTablesResult);
-    given(amazonDynamoDB.createTable(any())).willReturn(value);
+
+    given(createTable.isTable(any())).willReturn(false);
+    given(createTable.createTable(any(), any())).willReturn(value);
+    given(createTable.waitTableExists(any(), anyLong(), anyLong())).willReturn(true);
     List<CreateTableResult> table = this.dynamoDbMapping.createTable();
     assertThat(table).hasSize(1);
     assertThat(table.iterator().next().getTableDescription()).isEqualTo(tableDescription);
+    verify(createTable).waitTableExists("persons", 10, 30);
   }
 
   @DynamoDBTable(tableName = "persons")

@@ -58,13 +58,19 @@ public class DynamoDataAutoConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  public DynamoDbMapping dynamoDbMapping(AmazonDynamoDB amazonDynamoDB,
-                                         DynamoDBMappingContext context,
-                                         DynamoProperties properties) {
-    DynamoDbMapping dynamoDbMapping = new DynamoDbMapping(amazonDynamoDB, context);
-    dynamoDbMapping.setReadCapacityUnits(properties.getReadCapacityUnits());
-    dynamoDbMapping.setWriteCapacityUnits(properties.getWriteCapacityUnits());
-    return dynamoDbMapping;
+  public DynamoDbMapping dynamoDbMapping(CreateTable createTable,
+                                         DynamoDBMappingContext context) {
+    return new DynamoDbMapping(createTable, context);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  public CreateTable createTable(AmazonDynamoDB amazonDynamoDB,
+                                 DynamoProperties properties) {
+    DynamoDbCreateTable createTable = new DynamoDbCreateTable(amazonDynamoDB);
+    createTable.setReadCapacityUnits(properties.getReadCapacityUnits());
+    createTable.setWriteCapacityUnits(properties.getWriteCapacityUnits());
+    return createTable;
   }
 
   @Bean
