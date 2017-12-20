@@ -16,6 +16,8 @@
 
 package com.github.wonwoo.dynamodb.autoconfigure;
 
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.local.embedded.DynamoDBEmbedded;
 import com.github.wonwoo.dynamodb.autoconfigure.person.Person;
 import org.junit.Test;
 import org.socialsignin.spring.data.dynamodb.core.DynamoDBTemplate;
@@ -25,6 +27,7 @@ import org.springframework.boot.autoconfigure.context.PropertyPlaceholderAutoCon
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -57,6 +60,23 @@ public class DynamoDataAutoConfigurationTests {
           assertThat(context).hasSingleBean(DynamoDBTemplate.class);
           assertThat(context).hasSingleBean(DynamoDbMapping.class);
         });
+  }
+
+  @Test
+  public void createTableAutoConfig() throws Exception {
+    contextRunner.withConfiguration(AutoConfigurations.of(EntityScanConfig.class, AwsConfig.class))
+        .withPropertyValues("spring.data.dynamodb.access-key=test", "spring.data.dynamodb.secret-key=test",
+            "spring.data.dynamodb.ddl.enabled=true")
+        .run(context -> {
+          assertThat(context).hasSingleBean(DynamoDbCreateTableBeanPostProcessor.class);
+        });
+  }
+
+  static class AwsConfig {
+    @Bean
+    public AmazonDynamoDB amazonDynamoDB() {
+      return DynamoDBEmbedded.create().amazonDynamoDB();
+    }
   }
 
   @Configuration

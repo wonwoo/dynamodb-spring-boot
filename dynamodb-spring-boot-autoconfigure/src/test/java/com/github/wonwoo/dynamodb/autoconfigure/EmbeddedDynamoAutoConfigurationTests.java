@@ -38,7 +38,6 @@ public class EmbeddedDynamoAutoConfigurationTests {
     contextRunner.withUserConfiguration(DynamoDataAutoConfiguration.class)
         .run(context -> {
           assertThat(context).hasSingleBean(AmazonDynamoDB.class);
-          assertThat(context).hasSingleBean(DynamoDbCreateTableBeanPostProcessor.class);
           assertThat(context).hasSingleBean(DynamoDBTemplate.class);
         });
   }
@@ -48,7 +47,6 @@ public class EmbeddedDynamoAutoConfigurationTests {
     contextRunner
         .run(context -> {
           assertThat(context).hasSingleBean(AmazonDynamoDB.class);
-          assertThat(context).hasSingleBean(DynamoDbCreateTableBeanPostProcessor.class);
           assertThat(context).doesNotHaveBean(DynamoDBTemplate.class);
         });
   }

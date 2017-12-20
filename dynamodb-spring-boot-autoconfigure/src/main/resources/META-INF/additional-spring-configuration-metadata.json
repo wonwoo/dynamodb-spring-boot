@@ -5,6 +5,12 @@
       "type": "java.lang.Boolean",
       "description": "Enable Dynamodb repositories by default.",
       "defaultValue": true
+    },
+    {
+      "name": "spring.data.dynamodb.ddl.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable Dynamodb create Table by default.",
+      "defaultValue": false
     }
   ]
 }

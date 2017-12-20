@@ -20,6 +20,7 @@ import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.OverrideAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.core.AutoConfigureCache;
 import org.springframework.boot.test.autoconfigure.filter.TypeExcludeFilters;
+import org.springframework.boot.test.autoconfigure.properties.PropertyMapping;
 import org.springframework.boot.test.context.SpringBootTestContextBootstrapper;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.annotation.AliasFor;
@@ -41,6 +42,9 @@ import java.lang.annotation.*;
 @AutoConfigureDynamo
 @ImportAutoConfiguration
 public @interface DynamoTest {
+
+  @PropertyMapping("spring.data.dynamodb.ddl.enabled")
+  boolean createDdl() default true;
 
   boolean useDefaultFilters() default true;
 

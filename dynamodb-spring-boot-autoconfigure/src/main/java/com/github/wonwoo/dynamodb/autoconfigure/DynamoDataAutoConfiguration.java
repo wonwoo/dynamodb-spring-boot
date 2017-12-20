@@ -22,6 +22,7 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.domain.EntityScanner;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
@@ -79,5 +80,14 @@ public class DynamoDataAutoConfiguration {
                                            ObjectProvider<DynamoDBMapperConfig> dynamoDBMapperConfig) {
     return new DynamoDBTemplate(amazonDynamoDB,
         dynamoDBMapperConfig.getIfAvailable());
+  }
+
+  @ConditionalOnProperty(prefix = "spring.data.dynamodb.ddl", name = "enabled", havingValue = "true", matchIfMissing = false)
+  @Configuration
+  protected static class DynamoDbCreateTableAutoConfiguration {
+    @Bean
+    public DynamoDbCreateTableBeanPostProcessor dynamoDbCreateTableBeanPostProcessor() {
+      return new DynamoDbCreateTableBeanPostProcessor();
+    }
   }
 }

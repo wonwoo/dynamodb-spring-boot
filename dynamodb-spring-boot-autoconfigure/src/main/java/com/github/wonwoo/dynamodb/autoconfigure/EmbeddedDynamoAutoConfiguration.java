@@ -39,8 +39,4 @@ public class EmbeddedDynamoAutoConfiguration {
     return DynamoDBEmbedded.create().amazonDynamoDB();
   }
 
-  @Bean
-  public DynamoDbCreateTableBeanPostProcessor dynamoDbCreateTableBeanPostProcessor() {
-    return new DynamoDbCreateTableBeanPostProcessor();
-  }
 }
