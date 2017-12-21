@@ -16,19 +16,20 @@
 
 package com.github.wonwoo.dynamodb.autoconfigure;
 
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.model.*;
+import java.util.Collections;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Collections;
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.model.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 /**
@@ -104,7 +105,7 @@ public class DynamoDbCreateTableTests {
   public void waitTableIllegalStateExceptionTest() {
     given(this.amazonDynamoDB.describeTable(any(DescribeTableRequest.class)))
         .willAnswer(invocation -> describeTableResult(TableStatus.CREATING))
-        .willThrow(new IllegalStateException());
+        .willThrow(new AmazonClientException("error"));
     dynamoDbCreateTable.waitTableExists("test", 5, 10);
   }
 

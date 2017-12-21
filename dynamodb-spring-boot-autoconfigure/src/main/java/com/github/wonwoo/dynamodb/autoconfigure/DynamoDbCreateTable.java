@@ -16,15 +16,16 @@
 
 package com.github.wonwoo.dynamodb.autoconfigure;
 
-import com.amazonaws.AmazonClientException;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.model.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.model.*;
 
 /**
  * @author wonwoo
@@ -80,7 +81,7 @@ public class DynamoDbCreateTable implements CreateTable {
       return null;
     } catch (AmazonClientException e) {
       logger.error("Unknown error ", e);
-      throw new IllegalStateException();
+      throw new IllegalStateException("Unknown Exception", e);
     }
   }
 
