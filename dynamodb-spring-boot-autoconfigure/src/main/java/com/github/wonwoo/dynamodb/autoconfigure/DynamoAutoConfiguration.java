@@ -19,6 +19,7 @@ package com.github.wonwoo.dynamodb.autoconfigure;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.*;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.context.annotation.Conditional;
@@ -74,8 +75,12 @@ public class DynamoAutoConfiguration {
       ConditionMessage.Builder message = ConditionMessage
           .forCondition("DynamoDB");
       Environment environment = context.getEnvironment();
-      String accessKey = environment.getProperty("spring.data.dynamodb.access-key");
-      String secretKey = environment.getProperty("spring.data.dynamodb.secret-key");
+      Binder binder = Binder.get(environment);
+      DynamoProperties dynamoProperties = binder.bind("spring.data.dynamodb",
+              DynamoProperties.class)
+              .orElseGet(DynamoProperties::new);
+      String accessKey = dynamoProperties.getAccessKey();
+      String secretKey = dynamoProperties.getSecretKey();
       if (StringUtils.hasLength(accessKey) && StringUtils.hasLength(secretKey)) {
         return ConditionOutcome.match(
             message.available("found accessKey and secretKey property"));

@@ -17,11 +17,12 @@
 package com.github.wonwoo.dynamodb.autoconfigure;
 
 
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+
+import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -44,11 +45,34 @@ public class DynamoAutoConfigurationTests {
   @Test
   public void dynamoDbAutoConfig() {
     contextRunner.withConfiguration(AutoConfigurations.of(DynamoAutoConfiguration.class))
-        .withPropertyValues("spring.data.dynamodb.access-key=test", "spring.data.dynamodb.secret-key=test",
+        .withPropertyValues("spring.data.dynamodb.access-key=test-access-key", "spring.data.dynamodb.secret-key=test-secret-key",
             "spring.data.dynamodb.readCapacityUnits=100", "spring.data.dynamodb.writeCapacityUnits=200")
         .run(context -> {
           assertThat(context).hasSingleBean(AWSCredentialsProvider.class);
           assertThat(context).hasSingleBean(AmazonDynamoDB.class);
         });
   }
+
+
+  @Test
+  public void dynamoDbCamelCaseAutoConfig() {
+    contextRunner.withConfiguration(AutoConfigurations.of(DynamoAutoConfiguration.class))
+       .withPropertyValues("spring.data.dynamodb.accessKey=testAccessKey", "spring.data.dynamodb.secretKey=testSecretKey",
+           "spring.data.dynamodb.readCapacityUnits=100", "spring.data.dynamodb.writeCapacityUnits=200")
+       .run(context -> {
+           assertThat(context).hasSingleBean(AWSCredentialsProvider.class);
+           assertThat(context).hasSingleBean(AmazonDynamoDB.class);
+       });
+  }
+
+  @Test
+  public void dynamoDbUnderScoreAutoConfig() {
+    contextRunner.withConfiguration(AutoConfigurations.of(DynamoAutoConfiguration.class))
+      .withPropertyValues("spring.data.dynamodb.access_key=test_access_key", "spring.data.dynamodb.secret_key=test_secret_key",
+         "spring.data.dynamodb.readCapacityUnits=100", "spring.data.dynamodb.writeCapacityUnits=200")
+      .run(context -> {
+          assertThat(context).hasSingleBean(AWSCredentialsProvider.class);
+          assertThat(context).hasSingleBean(AmazonDynamoDB.class);
+          });
+    }
 }
