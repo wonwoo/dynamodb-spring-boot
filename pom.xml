@@ -51,7 +51,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <spring-boot.version>2.0.0.M7</spring-boot.version>
+        <spring-boot.version>2.0.0.RC2</spring-boot.version>
         <spring-data-dynamodb.version>5.0.0</spring-data-dynamodb.version>
         <dynamodb-local.version>1.11.86</dynamodb-local.version>
         <aws-java-sdk.version>1.11.232</aws-java-sdk.version>
