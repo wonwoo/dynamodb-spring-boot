@@ -21,7 +21,6 @@ import java.lang.reflect.AnnotatedElement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBMappingContext;
 import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBPersistentEntity;
@@ -29,10 +28,11 @@ import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBPersistentEntityImp
 import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBPersistentProperty;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.data.util.TypeInformation;
+import org.springframework.util.StringUtils;
 
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.amazonaws.services.dynamodbv2.model.*;
+import com.amazonaws.services.dynamodbv2.model.CreateTableResult;
 
 /**
  * @author wonwoo
@@ -84,8 +84,8 @@ public class DynamoDbMapping {
       }
       DynamoDBTable table = findMergedAnnotation(entity.getTypeInformation().getType(), DynamoDBTable.class);
       if (!createTable.isTable(table.tableName())) {
-        CreateTableResult createTableTable = createTable.createTable(table.tableName(), idProperty.getName());
-        if(!ACTIVE.equals(createTableTable.getTableDescription().getTableStatus()) ) {
+        CreateTableResult createTableTable = createTable.createTable(table.tableName(), getIdProperty(idProperty));
+        if(!ACTIVE.equals(createTableTable.getTableDescription().getTableStatus())) {
           createTable.waitTableExists(table.tableName(), this.secondsBetweenPolls, this.timeoutSeconds);
         }
         results.add(createTableTable);
@@ -93,6 +93,16 @@ public class DynamoDbMapping {
     }
     return results;
   }
+
+  private String getIdProperty(DynamoDBPersistentProperty idProperty) {
+    DynamoDBHashKey dynamoDBHashKey = idProperty.findAnnotation(DynamoDBHashKey.class);
+    String attributeName = dynamoDBHashKey.attributeName();
+    if(StringUtils.hasText(attributeName)) {
+      return attributeName;
+    }
+    return idProperty.getName();
+  }
+
 
   private <A extends Annotation> A findMergedAnnotation(AnnotatedElement element, Class<A> annotationType) {
     return AnnotatedElementUtils.findMergedAnnotation(element, annotationType);

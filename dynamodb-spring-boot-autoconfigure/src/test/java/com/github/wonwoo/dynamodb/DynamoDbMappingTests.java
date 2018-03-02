@@ -16,15 +16,11 @@
 
 package com.github.wonwoo.dynamodb;
 
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.amazonaws.services.dynamodbv2.model.CreateTableResult;
-import com.amazonaws.services.dynamodbv2.model.ListTablesResult;
-import com.amazonaws.services.dynamodbv2.model.TableDescription;
-import com.amazonaws.services.dynamodbv2.model.TableStatus;
-import com.github.wonwoo.dynamodb.autoconfigure.CreateTable;
-import com.github.wonwoo.dynamodb.autoconfigure.DynamoDbMapping;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,10 +31,14 @@ import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBPersistentEntityImp
 import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBPersistentProperty;
 import org.springframework.data.util.TypeInformation;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.model.CreateTableResult;
+import com.amazonaws.services.dynamodbv2.model.ListTablesResult;
+import com.amazonaws.services.dynamodbv2.model.TableDescription;
+import com.amazonaws.services.dynamodbv2.model.TableStatus;
+import com.github.wonwoo.dynamodb.autoconfigure.CreateTable;
+import com.github.wonwoo.dynamodb.autoconfigure.DynamoDbMapping;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -65,6 +65,7 @@ public class DynamoDbMappingTests {
     context = new DynamoDBMappingContext();
     HashSet<Class<?>> initialEntitySet = new HashSet<>();
     initialEntitySet.add(Person.class);
+    initialEntitySet.add(Foo.class);
     context.setInitialEntitySet(initialEntitySet);
     context.afterPropertiesSet();
     this.dynamoDbMapping = new DynamoDbMapping(createTable, context);
@@ -75,26 +76,55 @@ public class DynamoDbMappingTests {
   @Test
   public void getPersistentEntities() {
     Collection<DynamoDBPersistentEntityImpl<?>> entities = this.dynamoDbMapping.getPersistentEntities();
-    assertThat(entities).hasSize(1);
+    assertThat(entities).hasSize(2);
   }
 
   @Test
-  public void getPersistentEntity() {
+  public void getPersistentEntityPerson() {
     DynamoDBPersistentEntityImpl<?> entity = this.dynamoDbMapping.getPersistentEntity(Person.class);
     DynamoDBPersistentProperty idProperty = entity.getIdProperty();
+    DynamoDBHashKey dynamoDBHashKey = idProperty.getRequiredAnnotation(DynamoDBHashKey.class);
+    assertThat(dynamoDBHashKey.attributeName()).isEmpty();
     assertThat(idProperty.getActualType()).isEqualTo(String.class);
   }
 
   @Test
-  public void getIdProperty() {
+  public void getPersistentEntityFoo() {
+    DynamoDBPersistentEntityImpl<?> entity = this.dynamoDbMapping.getPersistentEntity(Foo.class);
+    DynamoDBPersistentProperty idProperty = entity.getIdProperty();
+    DynamoDBHashKey dynamoDBHashKey = idProperty.getRequiredAnnotation(DynamoDBHashKey.class);
+    assertThat(dynamoDBHashKey.attributeName()).isNotBlank();
+    assertThat(dynamoDBHashKey.attributeName()).isEqualTo("uuid");
+    assertThat(idProperty.getActualType()).isEqualTo(String.class);
+  }
+
+  @Test
+  public void getIdPropertyPerson() {
     DynamoDBPersistentProperty idProperty = this.dynamoDbMapping.getIdProperty(Person.class);
+    DynamoDBHashKey dynamoDBHashKey = idProperty.getRequiredAnnotation(DynamoDBHashKey.class);
+    assertThat(dynamoDBHashKey.attributeName()).isEmpty();
     assertThat(idProperty.getActualType()).isEqualTo(String.class);
   }
 
   @Test
-  public void getTypeInformation() {
+  public void getIdPropertyFoo() {
+    DynamoDBPersistentProperty idProperty = this.dynamoDbMapping.getIdProperty(Foo.class);
+    DynamoDBHashKey dynamoDBHashKey = idProperty.getRequiredAnnotation(DynamoDBHashKey.class);
+    assertThat(dynamoDBHashKey.attributeName()).isNotBlank();
+    assertThat(dynamoDBHashKey.attributeName()).isEqualTo("uuid");
+    assertThat(idProperty.getActualType()).isEqualTo(String.class);
+  }
+
+  @Test
+  public void getTypeInformationPerson() {
     TypeInformation<?> typeInformation = this.dynamoDbMapping.getTypeInformation(Person.class);
     assertThat(typeInformation.getType()).isEqualTo(Person.class);
+  }
+
+  @Test
+  public void getTypeInformationFoo() {
+    TypeInformation<?> typeInformation = this.dynamoDbMapping.getTypeInformation(Foo.class);
+    assertThat(typeInformation.getType()).isEqualTo(Foo.class);
   }
 
   @Test
@@ -111,9 +141,25 @@ public class DynamoDbMappingTests {
     given(createTable.createTable(any(), any())).willReturn(value);
     given(createTable.waitTableExists(any(), anyLong(), anyLong())).willReturn(true);
     List<CreateTableResult> table = this.dynamoDbMapping.createTable();
-    assertThat(table).hasSize(1);
+    assertThat(table).hasSize(2);
+    assertThat(table.iterator().next().getTableDescription()).isEqualTo(tableDescription);
     assertThat(table.iterator().next().getTableDescription()).isEqualTo(tableDescription);
     verify(createTable).waitTableExists("persons", 10, 30);
+    verify(createTable).waitTableExists("foo", 10, 30);
+  }
+
+  @DynamoDBTable(tableName = "foo")
+  private static class Foo {
+    @DynamoDBHashKey(attributeName = "uuid")
+    private String id;
+
+    public String getId() {
+      return id;
+    }
+
+    public void setId(String id) {
+      this.id = id;
+    }
   }
 
   @DynamoDBTable(tableName = "persons")
