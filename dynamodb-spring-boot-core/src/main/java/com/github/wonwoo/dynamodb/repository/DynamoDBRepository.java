@@ -16,12 +16,12 @@
 
 package com.github.wonwoo.dynamodb.repository;
 
+import java.io.Serializable;
+import java.util.List;
+
 import org.socialsignin.spring.data.dynamodb.repository.DynamoDBCrudRepository;
 import org.socialsignin.spring.data.dynamodb.repository.DynamoDBPagingAndSortingRepository;
 import org.springframework.data.repository.NoRepositoryBean;
-
-import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author wonwoo
@@ -35,8 +35,5 @@ public interface DynamoDBRepository<T, ID extends Serializable>
 
   @Override
   List<T> findAllById(Iterable<ID> ids);
-
-  @Override
-  <S extends T> List<S> saveAll(Iterable<S> entites);
 
 }
