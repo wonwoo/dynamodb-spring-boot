@@ -16,15 +16,16 @@
 
 package com.github.wonwoo.dynamodb;
 
-import com.github.wonwoo.dynamodb.domain.Person;
-import com.github.wonwoo.dynamodb.domain.PersonRepository;
+import java.util.Arrays;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.PageRequest;
 
-import java.util.Arrays;
+import com.github.wonwoo.dynamodb.domain.Person;
+import com.github.wonwoo.dynamodb.domain.PersonRepository;
 
 /**
  * @author wonwoo
@@ -40,10 +41,15 @@ public class SampleApplication {
   CommandLineRunner commandLineRunner(PersonRepository personRepository) {
     return args -> {
       personRepository.saveAll(Arrays.asList(
-          new Person("kevin"),
-          new Person("josh long"))
+              new Person("kevin"),
+              new Person("josh long"))
       );
+
       personRepository.findAll(PageRequest.of(0, 3, null))
+          .forEach(System.out::println);
+
+      System.out.println("find by Name");
+      personRepository.findByName("kevin")
           .forEach(System.out::println);
     };
   }
