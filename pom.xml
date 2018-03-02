@@ -51,8 +51,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <spring-boot.version>2.0.0.RC2</spring-boot.version>
-        <spring-data-dynamodb.version>5.0.0</spring-data-dynamodb.version>
+        <spring-boot.version>2.0.0.RELEASE</spring-boot.version>
+        <spring-data-dynamodb.version>5.0.1</spring-data-dynamodb.version>
         <dynamodb-local.version>1.11.86</dynamodb-local.version>
         <aws-java-sdk.version>1.11.232</aws-java-sdk.version>
         <sqlite4java.version>1.0.392</sqlite4java.version>
@@ -137,43 +137,7 @@
             <name>AWS DynamoDB Local Release Repository</name>
             <url>https://s3-us-west-2.amazonaws.com/dynamodb-local/release</url>
         </repository>
-        <repository>
-            <id>spring-snapshots</id>
-            <name>Spring Snapshots</name>
-            <url>https://repo.spring.io/snapshot</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
     </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>spring-snapshots</id>
-            <name>Spring Snapshots</name>
-            <url>https://repo.spring.io/snapshot</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-        <pluginRepository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
-
 
     <profiles>
         <profile>
