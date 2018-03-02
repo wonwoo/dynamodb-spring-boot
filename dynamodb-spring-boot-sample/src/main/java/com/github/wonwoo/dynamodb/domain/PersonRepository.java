@@ -16,9 +16,12 @@
 
 package com.github.wonwoo.dynamodb.domain;
 
-import com.github.wonwoo.dynamodb.repository.DynamoDBRepository;
+import java.util.List;
+
 import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
 import org.socialsignin.spring.data.dynamodb.repository.EnableScanCount;
+
+import com.github.wonwoo.dynamodb.repository.DynamoDBRepository;
 
 /**
  * @author wonwoo
@@ -27,4 +30,5 @@ import org.socialsignin.spring.data.dynamodb.repository.EnableScanCount;
 @EnableScanCount
 public interface PersonRepository extends DynamoDBRepository<Person, String> {
 
+  List<Person> findByName(String name);
 }
