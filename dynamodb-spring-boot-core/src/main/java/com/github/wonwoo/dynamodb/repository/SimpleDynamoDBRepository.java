@@ -17,11 +17,19 @@
 package com.github.wonwoo.dynamodb.repository;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import org.socialsignin.spring.data.dynamodb.core.DynamoDBOperations;
 import org.socialsignin.spring.data.dynamodb.repository.support.DynamoDBEntityInformation;
 import org.socialsignin.spring.data.dynamodb.repository.support.EnableScanPermissions;
 import org.socialsignin.spring.data.dynamodb.repository.support.SimpleDynamoDBPagingAndSortingRepository;
+import org.springframework.util.Assert;
+
+import static com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper.*;
+import static java.util.stream.Collectors.*;
 
 /**
  * @author wonwoo
@@ -35,5 +43,13 @@ public class SimpleDynamoDBRepository<T, ID extends Serializable>
       DynamoDBOperations dynamoDBOperations,
       EnableScanPermissions enableScanPermissions) {
     super(entityInformation, dynamoDBOperations, enableScanPermissions);
+  }
+
+  @Override
+  public <S extends T> List<S> saveAll(Iterable<S> entities) {
+    Assert.notNull(entities, "entities not be null!");
+    return StreamSupport
+        .stream(super.saveAll(entities).spliterator(), false)
+        .collect(toList());
   }
 }

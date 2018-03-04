@@ -36,4 +36,6 @@ public interface DynamoDBRepository<T, ID extends Serializable>
   @Override
   List<T> findAllById(Iterable<ID> ids);
 
+  @Override
+  <S extends T> List<S> saveAll(Iterable<S> entities);
 }
