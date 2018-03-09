@@ -1,8 +1,14 @@
 # dynamodb-spring-boot
 
-[![Coverage Status](https://coveralls.io/repos/github/wonwoo/dynamodb-spring-boot/badge.svg?branch=master)](https://coveralls.io/github/wonwoo/dynamodb-spring-boot?branch=master) [![Build Status](https://travis-ci.org/wonwoo/dynamodb-spring-boot.svg?branch=master)](https://travis-ci.org/wonwoo/dynamodb-spring-boot) [![Build Status](https://semaphoreci.com/api/v1/wonwoo/dynamodb-spring-boot/branches/saveall/badge.svg)](https://semaphoreci.com/wonwoo/dynamodb-spring-boot) [ ![Download](https://api.bintray.com/packages/wonwoo/dynamodb-spring-boot/dynamodb-spring-boot/images/download.svg) ](https://bintray.com/wonwoo/dynamodb-spring-boot/dynamodb-spring-boot/_latestVersion) 
+[![Coverage Status](https://coveralls.io/repos/github/wonwoo/dynamodb-spring-boot/badge.svg?branch=master)](https://coveralls.io/github/wonwoo/dynamodb-spring-boot?branch=master) [![Build Status](https://travis-ci.org/wonwoo/dynamodb-spring-boot.svg?branch=master)](https://travis-ci.org/wonwoo/dynamodb-spring-boot) [![Build Status](https://semaphoreci.com/api/v1/wonwoo/dynamodb-spring-boot/branches/master/badge.svg)](https://semaphoreci.com/wonwoo/dynamodb-spring-boot) [ ![Download](https://api.bintray.com/packages/wonwoo/dynamodb-spring-boot/dynamodb-spring-boot/images/download.svg) ](https://bintray.com/wonwoo/dynamodb-spring-boot/dynamodb-spring-boot/_latestVersion) 
 
 
+### spring boot version
+
+| dynamodb-spring-boot-starter version  | spring-data-dynamodb version            | Spring Boot version            |
+| ------------------------------------- | --------------------------------------- |--------------------------------|
+| 0.1.2                                 | 4.5.x                                   |  >= 1.4.0 < 2.0                |
+| 1.0.0                                 | 5.0.x                                   |  >= 2.0                        |
 
 
 ### dynamodb-spring-boot Example
@@ -59,9 +65,16 @@ CommandLineRunner commandLineRunner(PersonRepository personRepository) {
 <dependency>
     <groupId>com.github.wonwoo</groupId>
     <artifactId>dynamodb-spring-boot-starter</artifactId>
-    <version>0.1.2-RELEASE</version>
+    <version>{version}.RELEASE</version>
 </dependency>
 ```
+
+#### Create DDL
+```
+spring.data.dynamodb.ddl.enabled=true
+```
+
+`spring.data.dynamodb.ddl.enabled` default by `false`
 
 ### dynamodb-spring-boot-test Example
 
@@ -90,7 +103,7 @@ public class PersonRepositoryTests {
 <dependency>
   <groupId>com.github.wonwoo</groupId>
   <artifactId>dynamodb-spring-boot-starter-test</artifactId>
-  <version>0.1.2-RELEASE</version>
+  <version>{version}.RELEASE</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -156,3 +169,12 @@ public class PersonRepositoryTests {
 [SampleApplication](https://github.com/wonwoo/dynamodb-spring-boot/blob/master/dynamodb-spring-boot-sample/src/main/java/com/github/wonwoo/dynamodb/SampleApplication.java)
 
 [PersonRepositoryTests](https://github.com/wonwoo/dynamodb-spring-boot/blob/master/dynamodb-spring-boot-sample/src/test/java/com/github/wonwoo/dynamodb/PersonRepositoryTests.java)
+
+# Read more here 
+- [spring-data-dynamodb](https://github.com/spring-data-dynamodb/spring-data-dynamodb)
+- [spring-data-dynamodb-wiki](https://github.com/spring-data-dynamodb/spring-data-dynamodb/wiki)
+
+
+ 
+
+
