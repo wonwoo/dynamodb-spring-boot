@@ -8,7 +8,7 @@
 | dynamodb-spring-boot-starter version  | spring-data-dynamodb version            | Spring Boot version            |
 | ------------------------------------- | --------------------------------------- |--------------------------------|
 | 0.1.2                                 | 4.5.x                                   |  >= 1.4.0 < 2.0                |
-| 1.0.0                                 | 5.0.x                                   |  >= 2.0                        |
+| 1.0.x                                 | 5.0.x                                   |  >= 2.0                        |
 
 
 ### dynamodb-spring-boot Example
