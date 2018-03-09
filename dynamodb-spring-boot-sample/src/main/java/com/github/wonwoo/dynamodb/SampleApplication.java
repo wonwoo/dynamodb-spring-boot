@@ -45,7 +45,7 @@ public class SampleApplication {
               new Person("josh long"))
       );
 
-      personRepository.findAll(PageRequest.of(0, 3, null))
+      personRepository.findAll(PageRequest.of(0, 3))
           .forEach(System.out::println);
 
       System.out.println("find by Name");
