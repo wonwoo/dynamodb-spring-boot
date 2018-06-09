@@ -65,7 +65,7 @@ CommandLineRunner commandLineRunner(PersonRepository personRepository) {
 <dependency>
     <groupId>com.github.wonwoo</groupId>
     <artifactId>dynamodb-spring-boot-starter</artifactId>
-    <version>{version}.RELEASE</version>
+    <version>{version}-RELEASE</version>
 </dependency>
 ```
 
@@ -103,7 +103,7 @@ public class PersonRepositoryTests {
 <dependency>
   <groupId>com.github.wonwoo</groupId>
   <artifactId>dynamodb-spring-boot-starter-test</artifactId>
-  <version>{version}.RELEASE</version>
+  <version>{version}-RELEASE</version>
   <scope>test</scope>
 </dependency>
 ```
