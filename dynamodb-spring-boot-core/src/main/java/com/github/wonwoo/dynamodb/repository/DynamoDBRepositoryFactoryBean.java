@@ -18,20 +18,22 @@ package com.github.wonwoo.dynamodb.repository;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
+import java.io.Serializable;
 import org.socialsignin.spring.data.dynamodb.core.DynamoDBOperations;
 import org.socialsignin.spring.data.dynamodb.core.DynamoDBTemplate;
 import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBMappingContext;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.core.support.RepositoryFactoryBeanSupport;
 import org.springframework.data.repository.core.support.RepositoryFactorySupport;
-
-import java.io.Serializable;
 
 /**
  * @author wonwoo
  */
 public class DynamoDBRepositoryFactoryBean<T extends Repository<S, ID>, S, ID extends Serializable>
-    extends RepositoryFactoryBeanSupport<T, S, ID> {
+    extends RepositoryFactoryBeanSupport<T, S, ID> implements ApplicationContextAware {
 
   private DynamoDBMapperConfig dynamoDBMapperConfig;
 
@@ -39,19 +41,22 @@ public class DynamoDBRepositoryFactoryBean<T extends Repository<S, ID>, S, ID ex
 
   private DynamoDBOperations dynamoDBOperations;
 
+  private ApplicationContext applicationContext;
+
   public DynamoDBRepositoryFactoryBean(Class<? extends T> repositoryInterface) {
     super(repositoryInterface);
   }
 
   public void setAmazonDynamoDB(AmazonDynamoDB amazonDynamoDB) {
     this.amazonDynamoDB = amazonDynamoDB;
-    setMappingContext(new DynamoDBMappingContext());
   }
 
   @Override
   protected RepositoryFactorySupport createRepositoryFactory() {
     if (dynamoDBOperations == null) {
-      dynamoDBOperations = new DynamoDBTemplate(amazonDynamoDB, dynamoDBMapperConfig);
+      DynamoDBTemplate dynamoDBTemplate = new DynamoDBTemplate(amazonDynamoDB, dynamoDBMapperConfig);
+      dynamoDBTemplate.setApplicationContext(applicationContext);
+      dynamoDBOperations = dynamoDBTemplate;
     }
     return new DynamoDBRepositoryFactory(dynamoDBOperations);
   }
@@ -62,7 +67,14 @@ public class DynamoDBRepositoryFactoryBean<T extends Repository<S, ID>, S, ID ex
 
   public void setDynamoDBOperations(DynamoDBOperations dynamoDBOperations) {
     this.dynamoDBOperations = dynamoDBOperations;
-    setMappingContext(new DynamoDBMappingContext());
+  }
 
+  public void setDynamoDBMappingContext(DynamoDBMappingContext dynamoDBMappingContext) {
+    setMappingContext(dynamoDBMappingContext);
+  }
+
+  @Override
+  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    this.applicationContext = applicationContext;
   }
 }

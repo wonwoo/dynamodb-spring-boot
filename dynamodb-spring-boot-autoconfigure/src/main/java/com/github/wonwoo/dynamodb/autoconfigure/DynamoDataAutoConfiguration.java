@@ -16,9 +16,9 @@
 
 package com.github.wonwoo.dynamodb.autoconfigure;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import org.socialsignin.spring.data.dynamodb.core.DynamoDBTemplate;
 import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBMappingContext;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -76,10 +76,20 @@ public class DynamoDataAutoConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  public DynamoDBTemplate dynamoDBTemplate(AmazonDynamoDB amazonDynamoDB,
-                                           ObjectProvider<DynamoDBMapperConfig> dynamoDBMapperConfig) {
-    return new DynamoDBTemplate(amazonDynamoDB,
-        dynamoDBMapperConfig.getIfAvailable());
+  public DynamoDBMapperConfig dynamoDBMapperConfig() {
+    return DynamoDBMapperConfig.DEFAULT;
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  public DynamoDBMapper dynamoDBMapper(AmazonDynamoDB amazonDynamoDB, DynamoDBMapperConfig dynamoDBMapperConfig) {
+    return new DynamoDBMapper(amazonDynamoDB, dynamoDBMapperConfig);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  public DynamoDBTemplate dynamoDBTemplate(AmazonDynamoDB amazonDynamoDB, DynamoDBMapper dynamoDBMapper) {
+    return new DynamoDBTemplate(amazonDynamoDB, dynamoDBMapper);
   }
 
   @ConditionalOnProperty(prefix = "spring.data.dynamodb.ddl", name = "enabled", havingValue = "true", matchIfMissing = false)
