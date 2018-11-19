@@ -25,8 +25,8 @@ public interface CreateTable {
 
   boolean isTable(String tableName);
 
-  CreateTableResult createTable(String tableName, String hashKeyName);
+  CreateTableResult createTable(Class<?> type);
 
-  boolean waitTableExists(String tableName, long secondsBetweenPolls, long timeoutSeconds);
+  void waitTableActive(String tableName, int timeoutSeconds, int interval);
 
 }

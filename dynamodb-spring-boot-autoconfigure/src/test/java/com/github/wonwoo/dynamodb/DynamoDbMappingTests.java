@@ -43,6 +43,7 @@ import com.github.wonwoo.dynamodb.autoconfigure.DynamoDbMapping;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -138,14 +139,14 @@ public class DynamoDbMappingTests {
     listTablesResult.setTableNames(Arrays.asList("foo", "bar"));
 
     given(createTable.isTable(any())).willReturn(false);
-    given(createTable.createTable(any(), any())).willReturn(value);
-    given(createTable.waitTableExists(any(), anyLong(), anyLong())).willReturn(true);
+    given(createTable.createTable(any())).willReturn(value);
+    //given(createTable.waitTableActive(anyString(), anyLong(), anyLong())).willReturn(true);
     List<CreateTableResult> table = this.dynamoDbMapping.createTable();
     assertThat(table).hasSize(2);
     assertThat(table.iterator().next().getTableDescription()).isEqualTo(tableDescription);
     assertThat(table.iterator().next().getTableDescription()).isEqualTo(tableDescription);
-    verify(createTable).waitTableExists("persons", 10, 30);
-    verify(createTable).waitTableExists("foo", 10, 30);
+    verify(createTable).waitTableActive("persons", 30, 10);
+    verify(createTable).waitTableActive("foo", 30, 10);
   }
 
   @DynamoDBTable(tableName = "foo")
