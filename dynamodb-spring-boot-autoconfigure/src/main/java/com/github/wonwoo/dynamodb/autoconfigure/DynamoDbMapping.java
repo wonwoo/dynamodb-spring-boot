@@ -28,9 +28,7 @@ import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBPersistentEntityImp
 import org.socialsignin.spring.data.dynamodb.mapping.DynamoDBPersistentProperty;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.data.util.TypeInformation;
-import org.springframework.util.StringUtils;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.model.CreateTableResult;
 
@@ -42,14 +40,13 @@ public class DynamoDbMapping {
   private final CreateTable createTable;
   private final DynamoDBMappingContext context;
 
-  private static final String ACTIVE = "ACTIVE";
-  private static final long DEFAULT_SECONDS_BETWEEN_POLLS = 5L;
-  private static final long DEFAULT_TIMEOUT_SECONDS = 30L;
+  private static final int DEFAULT_SECONDS_BETWEEN_POLLS = 5;
+  private static final int DEFAULT_TIMEOUT_SECONDS = 30;
 
-  private long secondsBetweenPolls = DEFAULT_SECONDS_BETWEEN_POLLS;
-  private long timeoutSeconds = DEFAULT_TIMEOUT_SECONDS;
+  private int secondsBetweenPolls = DEFAULT_SECONDS_BETWEEN_POLLS;
+  private int timeoutSeconds = DEFAULT_TIMEOUT_SECONDS;
 
-  public DynamoDbMapping(CreateTable createTable, DynamoDBMappingContext context) {
+  public DynamoDbMapping(final CreateTable createTable, final DynamoDBMappingContext context) {
     this.createTable = createTable;
     this.context = context;
   }
@@ -58,61 +55,48 @@ public class DynamoDbMapping {
     return context.getPersistentEntities();
   }
 
-  public DynamoDBPersistentEntityImpl<?> getPersistentEntity(Class<?> type) {
-    DynamoDBPersistentEntityImpl<?> persistentEntity = context.getPersistentEntity(type);
+  public DynamoDBPersistentEntityImpl<?> getPersistentEntity(final Class<?> type) {
+    final DynamoDBPersistentEntityImpl<?> persistentEntity = context.getPersistentEntity(type);
     if(persistentEntity == null) {
       throw new NullPointerException("persistentEntity is null");
     }
     return persistentEntity;
   }
 
-  public DynamoDBPersistentProperty getIdProperty(Class<?> type) {
+  public DynamoDBPersistentProperty getIdProperty(final Class<?> type) {
     return getPersistentEntity(type).getIdProperty();
   }
 
-  public TypeInformation<?> getTypeInformation(Class<?> type) {
+  public TypeInformation<?> getTypeInformation(final Class<?> type) {
     return getPersistentEntity(type).getTypeInformation();
   }
 
-
   public List<CreateTableResult> createTable() {
-    List<CreateTableResult> results = new ArrayList<>();
-    for (DynamoDBPersistentEntity<?> entity : context.getPersistentEntities()) {
-      DynamoDBPersistentProperty idProperty = entity.getIdProperty();
+    final List<CreateTableResult> results = new ArrayList<>();
+    for (final DynamoDBPersistentEntity<?> entity : context.getPersistentEntities()) {
+      final DynamoDBPersistentProperty idProperty = entity.getIdProperty();
       if(idProperty == null) {
         throw new NullPointerException("entity property Id is null");
       }
-      DynamoDBTable table = findMergedAnnotation(entity.getTypeInformation().getType(), DynamoDBTable.class);
+      final DynamoDBTable table = findMergedAnnotation(entity.getTypeInformation().getType(), DynamoDBTable.class);
       if (!createTable.isTable(table.tableName())) {
-        CreateTableResult createTableTable = createTable.createTable(table.tableName(), getIdProperty(idProperty));
-        if(!ACTIVE.equals(createTableTable.getTableDescription().getTableStatus())) {
-          createTable.waitTableExists(table.tableName(), this.secondsBetweenPolls, this.timeoutSeconds);
-        }
+        final CreateTableResult createTableTable = createTable.createTable(entity.getTypeInformation().getType());
+        createTable.waitTableActive(table.tableName(), this.timeoutSeconds, this.secondsBetweenPolls);
         results.add(createTableTable);
       }
     }
     return results;
   }
 
-  private String getIdProperty(DynamoDBPersistentProperty idProperty) {
-    DynamoDBHashKey dynamoDBHashKey = idProperty.findAnnotation(DynamoDBHashKey.class);
-    String attributeName = dynamoDBHashKey.attributeName();
-    if(StringUtils.hasText(attributeName)) {
-      return attributeName;
-    }
-    return idProperty.getName();
-  }
-
-
-  private <A extends Annotation> A findMergedAnnotation(AnnotatedElement element, Class<A> annotationType) {
+  private <A extends Annotation> A findMergedAnnotation(final AnnotatedElement element, final Class<A> annotationType) {
     return AnnotatedElementUtils.findMergedAnnotation(element, annotationType);
   }
 
-  public void setSecondsBetweenPolls(long secondsBetweenPolls) {
+  public void setSecondsBetweenPolls(final int secondsBetweenPolls) {
     this.secondsBetweenPolls = secondsBetweenPolls;
   }
 
-  public void setTimeoutSeconds(long timeoutSeconds) {
+  public void setTimeoutSeconds(final int timeoutSeconds) {
     this.timeoutSeconds = timeoutSeconds;
   }
 }
